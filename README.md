@@ -1,16 +1,17 @@
-# forca
-Projeto final da disciplina sistemas distribuídos
+# Projeto final da disciplina sistemas distribuídos
 
 
 Definição jogo forca – trabalho sd1 (clone de gartic)
 
 Requisitos funcionais:
+
     • O sistema deve possibilitar usuários criarem salas de jogos 
     • O sistema deve ter uma opção para "descoberta" de salas de jogos utilizando comandos de broadcast para a rede local 
     • Cada jogador terá um contador que irá ser incrementado se errar uma letra ou errar o chute da palavra
     • O mestre da rodada tem o poder de kickar um jogador antes de começar a partida
 
 Requisitos não funcionais:
+
     • O sistema deve poder ser executado em várias máquinas desde que estejam em uma mesma rede 
     • O sistema deve possibilitar que múltiplas instâncias (dentro da mesma rede) consigam conectar em uma mesma sala disponibilizada 
     • O sistema deve utilizar algum modelo de comunicação distribuída apresentado na disciplina (Sockets, Objetos Distribuídos, Comunicação Assíncrona, P2P, Webservers, etc) 
@@ -28,6 +29,7 @@ Requisitos não funcionais:
     • As salas podem ter até 5 participantes, incluindo o mestre
 
 Regras de negócio:
+
     • O sistema deve possibilitar que o dono da sala inicie a rodada (mestre da rodada)
     • Quando o jogador chegar com a 5 com o contador, ele perde
     • O intervalo para cada jogador poder efetuar uma jogada é de 90 segundos
@@ -48,10 +50,12 @@ Regras de negócio:
 
 
 Personagens:
+
     • Jogadores normais → tentam adivinhar a palavra
     • Mestre da rodada (somente 1) → define a palavra pra forca
 
 Fluxo:
+
 	1. O jogador que criou a sala, mestre da rodada, escolhe a palavra
 	2. O mestre da rodada inicia a partida quando todos estão prontos
 		a. Se houver um jogador que não confirme estar pronto o jogo não inicia
