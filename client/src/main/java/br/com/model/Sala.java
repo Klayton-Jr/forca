@@ -1,5 +1,8 @@
 package br.com.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Sala {
 
     private long id;
@@ -9,6 +12,9 @@ public class Sala {
     private int numeroTotalRodadas;
     private int numeroAtualRodada;
     private int tempoRespostaLetra;
+    private boolean ativa;
+    private boolean emJogo;
+    private final List<Usuario> usuarios = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -64,5 +70,30 @@ public class Sala {
 
     public void setTempoRespostaLetra(int tempoRespostaLetra) {
         this.tempoRespostaLetra = tempoRespostaLetra;
+    }
+
+    public boolean isAtiva() {
+        return ativa;
+    }
+
+    public void setAtiva(boolean ativa) {
+        this.ativa = ativa;
+    }
+
+    public boolean isEmJogo() {
+        return emJogo;
+    }
+
+    public void setEmJogo(boolean emJogo) {
+        this.emJogo = emJogo;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios.clear();
+        this.usuarios.addAll(usuarios);
     }
 }

@@ -1,5 +1,7 @@
 package br.com.comunicacao;
 
+import org.json.JSONObject;
+
 public abstract class ComunicacaoBase {
 
     public abstract void executar();

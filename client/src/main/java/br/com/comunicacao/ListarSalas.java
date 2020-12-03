@@ -1,5 +1,6 @@
 package br.com.comunicacao;
 
+import br.com.factory.FabricaObjetos;
 import br.com.model.Observador;
 import br.com.model.Sala;
 import org.json.JSONArray;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class ListarSalas extends ComunicacaoBase {
 
-    private Observador<List<Sala>> observador;
+    private final Observador<List<Sala>> observador;
 
     public ListarSalas(Observador<List<Sala>> observador) {
         this.observador = observador;
@@ -28,24 +29,16 @@ public class ListarSalas extends ComunicacaoBase {
         JSONObject json = new JSONObject(resposta);
 
         if (json.getBoolean("resultado"))
-            observador.atualizar(carregarSalas(json.getJSONArray("dados")));
+            observador.atualizar(true, carregarSalas(json.getJSONArray("salas")));
+        else
+            observador.atualizar(false, null);
     }
 
     private List<Sala> carregarSalas(JSONArray jsonArray) {
         List<Sala> salas = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-            Sala sala = new Sala();
-            sala.setId(jsonObject.getInt("id"));
-            sala.setNome(jsonObject.getString("nome"));
-            sala.setNumeroMaximoUsuario(jsonObject.getInt("numeroMaximoUsuario"));
-            sala.setNumeroAtualUsuario(jsonObject.getInt("numeroAtualUsuario"));
-            sala.setNumeroTotalRodadas(jsonObject.getInt("numeroTotalRodadas"));
-            sala.setNumeroAtualRodada(jsonObject.getInt("numeroAtualRodada"));
-            sala.setTempoRespostaLetra(jsonObject.getInt("tempoRespostaLetra"));
-            salas.add(sala);
+            salas.add(FabricaObjetos.criarSalaDeJson(jsonArray.getJSONObject(i)));
         }
 
         return salas;

@@ -2,5 +2,5 @@ package br.com.model;
 
 public interface Observador<T> {
 
-    void atualizar(T t);
+    void atualizar(boolean resultado, T t);
 }
