@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class PainelNovaSala extends Painel {
+public class PainelNovaSala extends AnchorPane {
 
     private Button btnVoltar;
     private Button btnCriarSala;
@@ -97,7 +97,6 @@ public class PainelNovaSala extends Painel {
         return btnVoltar;
     }
 
-    @Override
     public void clear() {
         edtNomeSala.clear();
         edtQuantidadeMaximaJogadores.setValue(4);

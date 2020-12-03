@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Formulario extends Application {
@@ -13,6 +14,8 @@ public class Formulario extends Application {
     private Scene novaSalaScene;
     private PainelMenu painelMenu;
     private PainelNovaSala painelNovaSala;
+    private PainelProcurarSala painelProcurarSala;
+    private Scene procurarSalaScene;
 
     @Override
     public void start(Stage stage) {
@@ -23,17 +26,23 @@ public class Formulario extends Application {
         criarPainelMenu();
     }
 
-    private Parent getPainelMenu() {
+    private AnchorPane getPainelMenu() {
         painelMenu = new PainelMenu();
         painelMenu.getBtnCriarSala().setOnAction(this::irParaCriarSala);
         painelMenu.getBtnProcurarSala().setOnAction(this::irParaProcurarSala);
         return painelMenu;
     }
 
-    private Parent getNovaSala() {
+    private AnchorPane getNovaSala() {
         painelNovaSala = new PainelNovaSala();
         painelNovaSala.getBtnVoltar().setOnAction(this::voltarParaMenu);
         return painelNovaSala;
+    }
+
+    private AnchorPane getProcurarSala() {
+        painelProcurarSala = new PainelProcurarSala();
+        painelProcurarSala.getBtnVoltar().setOnAction(this::voltarParaMenu);
+        return painelProcurarSala;
     }
 
     private void voltarParaMenu(ActionEvent actionEvent) {
@@ -61,7 +70,14 @@ public class Formulario extends Application {
     }
 
     private void irParaProcurarSala(ActionEvent actionEvent) {
+        if (procurarSalaScene == null)
+            procurarSalaScene = new Scene(getProcurarSala());
+        else
+            painelProcurarSala.atualizar();
 
+        stage.setScene(procurarSalaScene);
+        stage.setTitle("Salas");
+        stage.show();
     }
 
     public static void main(String[] args) {

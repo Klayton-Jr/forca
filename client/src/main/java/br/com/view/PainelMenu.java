@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-public class PainelMenu extends Painel {
+public class PainelMenu extends AnchorPane {
 
     private Button btnCriarSala;
     private Button btnProcurarSala;
@@ -48,20 +48,11 @@ public class PainelMenu extends Painel {
         vBox.getChildren().add(btnProcurarSala);
     }
 
-    public TextField getEdtNome() {
-        return edtNome;
-    }
-
     public Button getBtnCriarSala() {
         return btnCriarSala;
     }
 
     public Button getBtnProcurarSala() {
         return btnProcurarSala;
-    }
-
-    @Override
-    public void clear() {
-
     }
 }
