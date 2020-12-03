@@ -1,30 +1,42 @@
 package br.com.view;
 
+import br.com.comunicacao.EntrarSala;
+import br.com.comunicacao.ListarSalas;
+import br.com.model.LoginSala;
 import br.com.model.Sala;
 import br.com.view.componente.ColumnGrid;
 import br.com.view.componente.Tabela;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
+
+import java.util.List;
 
 public class PainelProcurarSala extends AnchorPane {
 
     private Button btnVoltar;
     private Button btnEntrar;
     private Tabela<Sala> tabelaSalas;
+    private Formulario form;
+    private ListarSalas listarSalas;
+    private EntrarSala entrarSala;
 
-    public PainelProcurarSala() {
+    public PainelProcurarSala(Formulario form) {
+        this.form = form;
         inicializar();
     }
 
     private void inicializar() {
         btnVoltar = new Button("Voltar");
+        btnVoltar.setOnAction(this::clicarVoltar);
         AnchorPane.setTopAnchor(btnVoltar, 10.0);
         AnchorPane.setLeftAnchor(btnVoltar, 10.0);
         getChildren().add(btnVoltar);
 
         btnEntrar = new Button("Entrar");
+        btnEntrar.setOnAction(this::clicarEntrarSala);
         AnchorPane.setTopAnchor(btnEntrar, 10.0);
         AnchorPane.setRightAnchor(btnEntrar, 10.0);
         getChildren().add(btnEntrar);
@@ -40,13 +52,46 @@ public class PainelProcurarSala extends AnchorPane {
         AnchorPane.setRightAnchor(tabelaSalas, 10.0);
         AnchorPane.setBottomAnchor(tabelaSalas, 10.0);
         getChildren().add(tabelaSalas);
-    }
 
-    public Button getBtnVoltar() {
-        return btnVoltar;
+        listarSalas = new ListarSalas(this::observador);
     }
 
     public void atualizar() {
-
+        listarSalas.executar();
     }
+
+    private void clicarVoltar(ActionEvent event) {
+        listarSalas.parar();
+        form.mudarParaPainelMenu();
+        event.consume();
+    }
+
+    private void clicarEntrarSala(ActionEvent event) {
+        entrarSala = new EntrarSala(this::observador, getLoginSala());
+        entrarSala.executar();
+        event.consume();
+    }
+
+    private LoginSala getLoginSala() {
+        LoginSala loginSala = new LoginSala();
+        loginSala.setSalaID(form.getSala().getId());
+        loginSala.setUsuarioID(form.getUsuario().getId());
+        return loginSala;
+    }
+
+    private void observador(boolean resultado, List<Sala> salas) {
+        if (resultado) {
+            tabelaSalas.getItems().clear();
+            tabelaSalas.getItems().addAll(salas);
+        }
+    }
+
+    private void observador(boolean resultado, Sala sala) {
+        if (resultado) {
+            entrarSala.parar();
+            form.setSala(sala);
+            form.mudarParaPainelSala();
+        }
+    }
+
 }

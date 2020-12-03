@@ -1,21 +1,26 @@
 package br.com.view;
 
+import br.com.model.Sala;
+import br.com.model.Usuario;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Formulario extends Application {
 
+    private Usuario usuario;
+    private Sala sala;
+
     private Stage stage;
     private Scene menuScene;
     private Scene novaSalaScene;
+    private Scene procurarSalaScene;
+    private Scene salaScene;
     private PainelMenu painelMenu;
     private PainelNovaSala painelNovaSala;
     private PainelProcurarSala painelProcurarSala;
-    private Scene procurarSalaScene;
+    private PainelSala painelSala;
 
     @Override
     public void start(Stage stage) {
@@ -23,33 +28,30 @@ public class Formulario extends Application {
         stage.setWidth(800);
         stage.setHeight(600);
         stage.setResizable(false);
-        criarPainelMenu();
+        mudarParaPainelMenu();
     }
 
     private AnchorPane getPainelMenu() {
-        painelMenu = new PainelMenu();
-        painelMenu.getBtnCriarSala().setOnAction(this::irParaCriarSala);
-        painelMenu.getBtnProcurarSala().setOnAction(this::irParaProcurarSala);
+        painelMenu = new PainelMenu(this);
         return painelMenu;
     }
 
-    private AnchorPane getNovaSala() {
-        painelNovaSala = new PainelNovaSala();
-        painelNovaSala.getBtnVoltar().setOnAction(this::voltarParaMenu);
+    private AnchorPane getPainelNovaSala() {
+        painelNovaSala = new PainelNovaSala(this);
         return painelNovaSala;
     }
 
-    private AnchorPane getProcurarSala() {
-        painelProcurarSala = new PainelProcurarSala();
-        painelProcurarSala.getBtnVoltar().setOnAction(this::voltarParaMenu);
+    private AnchorPane getPainelProcurarSala() {
+        painelProcurarSala = new PainelProcurarSala(this);
         return painelProcurarSala;
     }
 
-    private void voltarParaMenu(ActionEvent actionEvent) {
-        criarPainelMenu();
+    private AnchorPane getPainelSala() {
+        painelSala = new PainelSala(this);
+        return painelSala;
     }
 
-    private void criarPainelMenu() {
+    void mudarParaPainelMenu() {
         if (menuScene == null)
             menuScene = new Scene(getPainelMenu());
 
@@ -58,9 +60,9 @@ public class Formulario extends Application {
         stage.show();
     }
 
-    private void irParaCriarSala(ActionEvent actionEvent) {
+    void mudarParaPainelCriarSala() {
         if (novaSalaScene == null)
-            novaSalaScene = new Scene(getNovaSala());
+            novaSalaScene = new Scene(getPainelNovaSala());
         else
             painelNovaSala.clear();
 
@@ -69,15 +71,42 @@ public class Formulario extends Application {
         stage.show();
     }
 
-    private void irParaProcurarSala(ActionEvent actionEvent) {
+    void mudarParaPainelProcurarSala() {
         if (procurarSalaScene == null)
-            procurarSalaScene = new Scene(getProcurarSala());
+            procurarSalaScene = new Scene(getPainelProcurarSala());
         else
             painelProcurarSala.atualizar();
 
         stage.setScene(procurarSalaScene);
         stage.setTitle("Salas");
         stage.show();
+    }
+
+    public void mudarParaPainelSala() {
+        if (salaScene == null)
+            salaScene = new Scene(getPainelSala());
+
+        painelSala.atualizar(this.sala);
+
+        stage.setScene(salaScene);
+        stage.setTitle("Sala");
+        stage.show();
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Sala getSala() {
+        return sala;
+    }
+
+    public void setSala(Sala sala) {
+        this.sala = sala;
     }
 
     public static void main(String[] args) {

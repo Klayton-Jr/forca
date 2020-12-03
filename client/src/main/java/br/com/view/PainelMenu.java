@@ -1,5 +1,10 @@
 package br.com.view;
 
+import br.com.comunicacao.ValidarUsuario;
+import br.com.model.Usuario;
+import br.com.view.componente.Dialogo;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -7,13 +12,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import javax.swing.*;
+
 public class PainelMenu extends AnchorPane {
 
     private Button btnCriarSala;
     private Button btnProcurarSala;
     private TextField edtNome;
+    private Formulario form;
+    private ValidarUsuario validarUsuario;
 
-    public PainelMenu() {
+    public PainelMenu(Formulario form) {
+        this.form = form;
         inicializa();
     }
 
@@ -40,19 +50,52 @@ public class PainelMenu extends AnchorPane {
 
         btnCriarSala = new Button("Criar sala");
         btnCriarSala.setMaxWidth(Double.MAX_VALUE);
+        btnCriarSala.setOnAction(this::clicarCriarSala);
         btnCriarSala.requestFocus();
         vBox.getChildren().add(btnCriarSala);
 
         btnProcurarSala = new Button("Procurar sala");
         btnProcurarSala.setMaxWidth(Double.MAX_VALUE);
+        btnProcurarSala.setOnAction(this::clicarProcurarSala);
         vBox.getChildren().add(btnProcurarSala);
     }
 
-    public Button getBtnCriarSala() {
-        return btnCriarSala;
+    private void clicarCriarSala(ActionEvent event) {
+        if (edtNome != null && !edtNome.getText().trim().equals("")) {
+            validarUsuario = new ValidarUsuario(this::observadorCriarSala, edtNome.getText());
+            validarUsuario.executar();
+        } else {
+            Dialogo.atencao("Informe um nome de usuário para continuar!");
+        }
+
+        event.consume();
     }
 
-    public Button getBtnProcurarSala() {
-        return btnProcurarSala;
+    private void clicarProcurarSala(ActionEvent event) {
+        if (edtNome != null && !edtNome.getText().trim().equals("")) {
+            validarUsuario = new ValidarUsuario(this::observadorProcurarSala, edtNome.getText());
+            validarUsuario.executar();
+        } else {
+            Dialogo.atencao("Informe um nome de usuário para continuar!");
+        }
+
+        event.consume();
     }
+
+    private void observadorProcurarSala(boolean resultado, Usuario usuario) {
+        if (resultado) {
+            validarUsuario.parar();
+            form.setUsuario(usuario);
+            form.mudarParaPainelProcurarSala();
+        }
+    }
+
+    private void observadorCriarSala(boolean resultado, Usuario usuario) {
+        if (resultado) {
+            validarUsuario.parar();
+            form.setUsuario(usuario);
+            form.mudarParaPainelCriarSala();
+        }
+    }
+
 }

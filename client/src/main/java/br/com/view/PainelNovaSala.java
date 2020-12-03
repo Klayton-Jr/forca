@@ -1,6 +1,9 @@
 package br.com.view;
 
+import br.com.comunicacao.CriarSala;
+import br.com.model.Sala;
 import br.com.view.componente.IntTextField;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -14,18 +17,23 @@ public class PainelNovaSala extends AnchorPane {
     private IntTextField edtQuantidadeMaximaJogadores;
     private IntTextField edtNumeroRodadas;
     private IntTextField edtTempoResponderCadaLetra;
+    private Formulario form;
+    private CriarSala criarSala;
 
-    public PainelNovaSala() {
+    public PainelNovaSala(Formulario form) {
+        this.form = form;
         inicializar();
     }
 
     private void inicializar() {
         btnVoltar = new Button("Voltar");
+        btnVoltar.setOnAction(this::clicarVoltar);
         AnchorPane.setTopAnchor(btnVoltar, 10.0);
         AnchorPane.setLeftAnchor(btnVoltar, 10.0);
         getChildren().add(btnVoltar);
 
         btnCriarSala = new Button("Criar");
+        btnCriarSala.setOnAction(this::clicarCriarSala);
         AnchorPane.setTopAnchor(btnCriarSala, 10.0);
         AnchorPane.setRightAnchor(btnCriarSala, 10.0);
         getChildren().add(btnCriarSala);
@@ -94,14 +102,39 @@ public class PainelNovaSala extends AnchorPane {
         painelConfiguracoes.getChildren().add(edtTempoResponderCadaLetra);
     }
 
-    public Button getBtnVoltar() {
-        return btnVoltar;
-    }
-
     public void clear() {
         edtNomeSala.clear();
         edtQuantidadeMaximaJogadores.setValue(4);
         edtNumeroRodadas.setValue(10);
         edtTempoResponderCadaLetra.setValue(15);
     }
+
+    private void clicarVoltar(ActionEvent event) {
+        form.mudarParaPainelMenu();
+        event.consume();
+    }
+
+    private void clicarCriarSala(ActionEvent event) {
+        criarSala = new CriarSala(this::obsevador, getSala());
+        criarSala.executar();
+        event.consume();
+    }
+
+    private void obsevador(boolean resultado, Sala sala) {
+        if (resultado) {
+            criarSala.parar();
+            form.setSala(sala);
+            form.mudarParaPainelSala();
+        }
+    }
+
+    private Sala getSala() {
+        Sala sala = new Sala();
+        sala.setNome(edtNomeSala.getText());
+        sala.setNumeroMaximoUsuario(edtQuantidadeMaximaJogadores.getInt());
+        sala.setNumeroTotalRodadas(edtNumeroRodadas.getInt());
+        sala.setTempoRespostaLetra(edtTempoResponderCadaLetra.getInt());
+        return sala;
+    }
+
 }
