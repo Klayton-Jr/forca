@@ -1,9 +1,9 @@
-package br.com.view;
+package br.com.view.componente;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 
-class IntTextField extends TextField {
+public class IntTextField extends TextField {
 
     private static final String REGEX_NUMBERS = "[\\d]+";
     private static final String REGEX_NO_NUMBERS = "[^\\d]";

@@ -1,5 +1,6 @@
 package br.com.view;
 
+import br.com.view.componente.IntTextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
