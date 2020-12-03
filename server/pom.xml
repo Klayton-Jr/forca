@@ -8,6 +8,7 @@
 		<version>2.4.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>br.com</groupId>
 	<artifactId>forca</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -16,7 +17,7 @@
 	<description>Jogo da forca - servidor</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>14</java.version>
 	</properties>
 
 	<dependencies>
@@ -68,6 +69,13 @@
 			<artifactId>jackson-databind</artifactId> 
 			<version>2.10.2</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>16-ea+1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
