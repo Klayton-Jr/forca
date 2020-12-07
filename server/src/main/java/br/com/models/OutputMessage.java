@@ -1,14 +1,26 @@
 package br.com.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Date;
+
+@AllArgsConstructor
 public class OutputMessage {
 
+    @Getter @Setter
     private String from;
-    private String text;
-    private String time;
+    @Getter @Setter
+    private String message;
+    @Getter @Setter
+    private String topic;
+    @Getter @Setter
+    private Date time = new Date();
 
-    public OutputMessage(String from, String text, String time) {
+    public OutputMessage(String from, String message, String topic) {
         this.from = from;
-        this.text = text;
-        this.time = time;
+        this.message = message;
+        this.topic = topic;
     }
 }

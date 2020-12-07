@@ -10,6 +10,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topic");
@@ -18,9 +19,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-         registry.addEndpoint("/chat");
-         registry.addEndpoint("/chat").withSockJS();
+        registry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
     }
 
-    
+//    @Override
+//    public void registerStompEndpoints(StompEndpointRegistry registry) {
+//         registry.addEndpoint("/chat");
+//         registry.addEndpoint("/chat").withSockJS();
+//         //se o cliente e o servidor forem de domínios diferentes, é preciso permitir o acesso
+//         //       .setAllowedOrigins("mydomain.com").withSockJS()
+//    }
 }

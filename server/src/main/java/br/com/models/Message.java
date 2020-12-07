@@ -9,4 +9,6 @@ public class Message {
     private String from;
     @Getter @Setter
     private String text;
+    @Getter @Setter
+    private String name;
 }
