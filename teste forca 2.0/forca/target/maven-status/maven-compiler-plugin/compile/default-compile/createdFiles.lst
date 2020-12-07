@@ -1,7 +1,0 @@
-br\com\forca\controller\MessageController.class
-br\com\forca\ForcaApplication.class
-br\com\forca\model\ChatMessage$MessageType.class
-br\com\forca\config\WebSocketConfig.class
-br\com\forca\model\ChatMessage.class
-br\com\forca\model\HelloMessage.class
-br\com\forca\model\Greeting.class
