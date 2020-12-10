@@ -1,6 +1,6 @@
 package br.com.forca.controller;
 
-import br.com.forca.model.ChatMessage;
+import br.com.forca.model.message.ChatMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

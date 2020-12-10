@@ -1,30 +1,27 @@
 package br.com.forca.controller;
 
 import br.com.forca.data.RoomStorage;
+import br.com.forca.exceptions.InvalidUserToSetTheWord;
 import br.com.forca.exceptions.SizeRoomException;
-import br.com.forca.model.ChatRoom;
-import br.com.forca.model.ChatMessage;
-import br.com.forca.model.HelloMessage;
-import br.com.forca.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import br.com.forca.model.*;
+import br.com.forca.model.message.ChatMessage;
+import br.com.forca.model.message.ChatRoom;
+import br.com.forca.model.request.ChooseWordRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Controller
-public class MessageController {
+public class MessageControllerWSocket {
 
     //@Autowired
     //private SimpMessagingTemplate simpMessagingTemplate;
@@ -56,30 +53,17 @@ public class MessageController {
         return chatMessage;
     }
 
+//    @MessageMapping("/chat.send")
+//    @SendTo("/topic/")
+    public ChatMessage sendMessageToEspecifiedUser(@Payload ChatMessage chatMessage) {
+        return chatMessage;
+    }
+
     //lista de salas
     @MessageMapping("chat/list-rooms")
     @SendTo("/topic/rooms")
     public List<String> listChatRoomsId(@Payload User user) {
         return RoomStorage.getInstance().getChatRooms().stream().map(ChatRoom::getId).collect(Collectors.toList());
-    }
-
-    /**
-     *
-     * @return IdRoom, quantity of players
-     */
-    @GetMapping("/chat/list-rooms")
-    public ResponseEntity<Map<String, Integer>> returnAvailableRooms() {
-        return ResponseEntity.ok(RoomStorage.getInstance().getChatRooms().stream().collect(Collectors.toMap(ChatRoom::getId, p -> p.getUsers().size())));
-    }
-
-    @PostMapping("/chat/game-room{idRoom}")
-    public void choosingTheWord(@PathVariable String idRoom, String word, User user) {
-        RoomManagment roomManagment = new RoomManagment(RoomStorage.getInstance().getChatRooms());
-        try {
-            roomManagment.chooseTheWord(idRoom, word, user);
-        } catch (Exception e) {
-            ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        }
     }
 
     @MessageMapping("/user-all")

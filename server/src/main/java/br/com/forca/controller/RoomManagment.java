@@ -2,7 +2,7 @@ package br.com.forca.controller;
 
 import br.com.forca.data.RoomStorage;
 import br.com.forca.exceptions.InvalidUserToSetTheWord;
-import br.com.forca.model.ChatRoom;
+import br.com.forca.model.message.ChatRoom;
 import br.com.forca.exceptions.SizeRoomException;
 import br.com.forca.model.User;
 import lombok.AllArgsConstructor;

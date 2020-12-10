@@ -1,4 +1,4 @@
-package br.com.forca.model;
+package br.com.forca.model.message;
 
 import lombok.Builder;
 import lombok.Getter;

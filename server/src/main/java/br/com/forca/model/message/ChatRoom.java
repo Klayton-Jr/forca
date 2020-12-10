@@ -1,4 +1,4 @@
-package br.com.forca.model;
+package br.com.forca.model.message;
 
 import br.com.forca.model.User;
 import lombok.AllArgsConstructor;

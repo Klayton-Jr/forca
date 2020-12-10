@@ -1,6 +1,6 @@
 package br.com.forca.data;
 
-import br.com.forca.model.ChatRoom;
+import br.com.forca.model.message.ChatRoom;
 import lombok.Getter;
 import lombok.Setter;
 
