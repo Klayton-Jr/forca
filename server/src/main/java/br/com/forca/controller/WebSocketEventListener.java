@@ -38,4 +38,7 @@ public class WebSocketEventListener {
 
         sendingOperations.convertAndSend("/topic/public", chatMessage);
     }
+
+    //@EventListener
+    //public void handleMessageSend(final Session)
 }

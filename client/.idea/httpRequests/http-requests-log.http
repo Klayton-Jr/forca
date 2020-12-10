@@ -1,0 +1,32 @@
+GET http://localhost:8080/chat/list-rooms
+
+<> 2020-12-09T013626.200.json
+
+###
+
+GET http://localhost:8080/chat/list-rooms
+
+<> 2020-12-09T011743.200.json
+
+###
+
+GET http://localhost:8080/chat/list-rooms
+
+<> 2020-12-09T011718.200.json
+
+###
+
+GET http://localhost:8080/chat/list-rooms
+
+###
+
+GET http://localhost:8080/chat/list-rooms
+
+<> 2020-12-09T011054.200.json
+
+###
+
+GET http://localhost:8080/chat/list-rooms
+
+###
+
