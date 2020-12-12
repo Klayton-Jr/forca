@@ -70,7 +70,7 @@ public abstract class ComunicacaoBase<T> implements Runnable {
     }
 
     protected final void erro(String mensagem) {
-        observador.erro(mensagem);
+        Platform.runLater(()-> observador.erro(mensagem));
     }
 
 }
