@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 
-public class Conexao extends ComunicacaoBase {
+public class Conexao {
 
     private StompSession session;
 
@@ -24,7 +24,6 @@ public class Conexao extends ComunicacaoBase {
         return session;
     }
 
-    @Override
     public void executar() {
         WebSocketClient webSocketClient = new StandardWebSocketClient();
         SockJsClient sockJsClient = new SockJsClient(Collections.singletonList((new WebSocketTransport(webSocketClient))));
@@ -39,24 +38,19 @@ public class Conexao extends ComunicacaoBase {
                             new StompSessionHandlerAdapter() {})
                     .get();
 
+            session.
+
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    @Override
-    public void callback(String resposta) {
-
-    }
-
-    @Override
     public void enviarRequisicao(String json) {
 
         this.session.send("", json);
     }
 
-    @Override
     public void parar() {
         this.session.disconnect();
     }
