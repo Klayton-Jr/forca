@@ -3,6 +3,7 @@ package br.com.view;
 import br.com.comunicacao.EntrarSala;
 import br.com.comunicacao.ListarSalas;
 import br.com.model.LoginSala;
+import br.com.model.Observador;
 import br.com.model.Sala;
 import br.com.view.componente.ColumnGrid;
 import br.com.view.componente.Tabela;
@@ -43,7 +44,7 @@ public class PainelProcurarSala extends AnchorPane {
 
         tabelaSalas = new Tabela<>();
         tabelaSalas.addColumn(new ColumnGrid<>("ID", "id"), 0.1);
-        tabelaSalas.addColumn(new ColumnGrid<>("Nome", "nome"),0.4);
+        tabelaSalas.addColumn(new ColumnGrid<>("Nome", "nome"), 0.4);
         tabelaSalas.addColumn(new ColumnGrid<>("Usuários na Sala", "numeroAtualUsuario"), 0.23);
         tabelaSalas.addColumn(new ColumnGrid<>("Número Máximo de Usuário", "numeroMaximoUsuario"), 0.23);
 
@@ -53,7 +54,7 @@ public class PainelProcurarSala extends AnchorPane {
         AnchorPane.setBottomAnchor(tabelaSalas, 10.0);
         getChildren().add(tabelaSalas);
 
-        listarSalas = new ListarSalas(this::observador);
+        listarSalas = new ListarSalas(new ObservadorCriarSalas());
     }
 
     public void atualizar() {
@@ -67,7 +68,7 @@ public class PainelProcurarSala extends AnchorPane {
     }
 
     private void clicarEntrarSala(ActionEvent event) {
-        entrarSala = new EntrarSala(this::observador, getLoginSala());
+        entrarSala = new EntrarSala(new ObservadorEntrarSala(), getLoginSala());
         entrarSala.executar();
         event.consume();
     }
@@ -79,19 +80,31 @@ public class PainelProcurarSala extends AnchorPane {
         return loginSala;
     }
 
-    private void observador(boolean resultado, List<Sala> salas) {
-        if (resultado) {
+    private class ObservadorCriarSalas implements Observador<List<Sala>> {
+
+        @Override
+        public void sucesso(List<Sala> salas) {
             tabelaSalas.getItems().clear();
             tabelaSalas.getItems().addAll(salas);
         }
+
+        @Override
+        public void erro(String mensagem) {
+
+        }
     }
 
-    private void observador(boolean resultado, Sala sala) {
-        if (resultado) {
+    private class ObservadorEntrarSala implements Observador<Sala> {
+        @Override
+        public void sucesso(Sala sala) {
             entrarSala.parar();
             form.setSala(sala);
             form.mudarParaPainelSala();
         }
-    }
 
+        @Override
+        public void erro(String mensagem) {
+
+        }
+    }
 }

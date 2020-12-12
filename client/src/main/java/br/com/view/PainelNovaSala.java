@@ -1,6 +1,7 @@
 package br.com.view;
 
 import br.com.comunicacao.CriarSala;
+import br.com.model.Observador;
 import br.com.model.Sala;
 import br.com.view.componente.IntTextField;
 import javafx.event.ActionEvent;
@@ -115,17 +116,9 @@ public class PainelNovaSala extends AnchorPane {
     }
 
     private void clicarCriarSala(ActionEvent event) {
-        criarSala = new CriarSala(this::obsevador, getSala());
+        criarSala = new CriarSala(new Obsevador(), getSala());
         criarSala.executar();
         event.consume();
-    }
-
-    private void obsevador(boolean resultado, Sala sala) {
-        if (resultado) {
-            criarSala.parar();
-            form.setSala(sala);
-            form.mudarParaPainelSala();
-        }
     }
 
     private Sala getSala() {
@@ -137,4 +130,17 @@ public class PainelNovaSala extends AnchorPane {
         return sala;
     }
 
+    private class Obsevador implements Observador<Sala> {
+        @Override
+        public void sucesso(Sala sala) {
+            criarSala.parar();
+            form.setSala(sala);
+            form.mudarParaPainelSala();
+        }
+
+        @Override
+        public void erro(String mensagem) {
+
+        }
+    }
 }

@@ -35,9 +35,9 @@ public class EntrarSala extends ComunicacaoBase {
         JSONObject json = new JSONObject(resposta);
 
         if (json.getBoolean("resultado"))
-            observador.atualizar(true, carregarSala(json.getJSONObject("sala")));
+            observador.sucesso(carregarSala(json.getJSONObject("sala")));
         else
-            observador.atualizar(false, null);
+            observador.sucesso(null);
     }
 
     private Sala carregarSala(JSONObject jsonSala) {

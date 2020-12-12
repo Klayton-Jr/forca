@@ -1,23 +1,24 @@
 package br.com.model;
 
-public class Usuario {
+public final class Usuario {
 
-    private long id;
-    private String nome;
+    private final String id;
+    private final String nome;
 
-    public long getId() {
-        return id;
+    public Usuario(String id, String nome) {
+        this.id = id;
+        this.nome = nome;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public Usuario(String nome) {
+        this(null, nome);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getNome() {
         return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 }

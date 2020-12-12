@@ -20,9 +20,6 @@ public class FabricaObjetos {
     }
 
     public static Usuario criarUsuarioDeJson(JSONObject jsonObject) {
-        Usuario usuario = new Usuario();
-        usuario.setId(jsonObject.getLong("id"));
-        usuario.setNome(jsonObject.getString("nome"));
-        return usuario;
+        return new Usuario(jsonObject.getString("id"), jsonObject.getString("nome"));
     }
 }

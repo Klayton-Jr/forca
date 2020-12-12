@@ -38,8 +38,6 @@ public class Conexao {
                             new StompSessionHandlerAdapter() {})
                     .get();
 
-            session.
-
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }

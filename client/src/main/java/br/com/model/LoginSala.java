@@ -2,14 +2,14 @@ package br.com.model;
 
 public class LoginSala {
 
-    private long usuarioID;
+    private String usuarioID;
     private long salaID;
 
-    public long getUsuarioID() {
+    public String getUsuarioID() {
         return usuarioID;
     }
 
-    public void setUsuarioID(long usuarioID) {
+    public void setUsuarioID(String usuarioID) {
         this.usuarioID = usuarioID;
     }
 

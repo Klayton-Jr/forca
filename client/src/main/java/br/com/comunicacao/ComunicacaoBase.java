@@ -1,38 +1,29 @@
 package br.com.comunicacao;
 
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.web.socket.client.WebSocketClient;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.WebSocketTransport;
-
-import java.util.Collections;
-import java.util.concurrent.ExecutionException;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 public abstract class ComunicacaoBase {
 
-    private StompSession session;
+    public static final String HOST = "localhost";
+    public static final int PORT = 7070;
+    private DataOutputStream writer;
+    private DataInputStream reader;
+    private Socket client;
 
     public ComunicacaoBase() {
         inicializar();
     }
 
     private void inicializar() {
-        WebSocketClient webSocketClient = new StandardWebSocketClient();
-        SockJsClient sockJsClient = new SockJsClient(Collections.singletonList((new WebSocketTransport(webSocketClient))));
-        WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
-
         try {
-            this.session = stompClient.connect("http://localhost:" + 8080 + "/forca-game",
-                            new StompSessionHandlerAdapter() {})
-                    .get();
-
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
+            client = new Socket(HOST, PORT);
+            writer = new DataOutputStream(client.getOutputStream());
+            reader = new DataInputStream(client.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -41,11 +32,27 @@ public abstract class ComunicacaoBase {
     public abstract void callback(String resposta);
 
     public final void enviarRequisicao(String json) {
-        this.session.send("", json);
+        try {
+            writer.writeUTF(json);
+            callback(reader.readUTF());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public final void parar() {
-        this.session.disconnect();
+        try {
+            if (writer != null)
+                writer.close();
+
+            if (reader != null)
+                reader.close();
+
+            if (client != null && !client.isClosed())
+                client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

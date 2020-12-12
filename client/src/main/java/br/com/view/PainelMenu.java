@@ -1,6 +1,7 @@
 package br.com.view;
 
 import br.com.comunicacao.ValidarUsuario;
+import br.com.model.Observador;
 import br.com.model.Usuario;
 import br.com.view.componente.Dialogo;
 import javafx.event.ActionEvent;
@@ -16,11 +17,8 @@ import javax.swing.*;
 
 public class PainelMenu extends AnchorPane {
 
-    private Button btnCriarSala;
-    private Button btnProcurarSala;
     private TextField edtNome;
-    private Formulario form;
-    private ValidarUsuario validarUsuario;
+    private final Formulario form;
 
     public PainelMenu(Formulario form) {
         this.form = form;
@@ -48,13 +46,13 @@ public class PainelMenu extends AnchorPane {
         edtNome.setPromptText("Insira seu nome de usuário");
         vBox.getChildren().add(edtNome);
 
-        btnCriarSala = new Button("Criar sala");
+        Button btnCriarSala = new Button("Criar sala");
         btnCriarSala.setMaxWidth(Double.MAX_VALUE);
         btnCriarSala.setOnAction(this::clicarCriarSala);
         btnCriarSala.requestFocus();
         vBox.getChildren().add(btnCriarSala);
 
-        btnProcurarSala = new Button("Procurar sala");
+        Button btnProcurarSala = new Button("Procurar sala");
         btnProcurarSala.setMaxWidth(Double.MAX_VALUE);
         btnProcurarSala.setOnAction(this::clicarProcurarSala);
         vBox.getChildren().add(btnProcurarSala);
@@ -62,19 +60,25 @@ public class PainelMenu extends AnchorPane {
 
     private void clicarCriarSala(ActionEvent event) {
         if (edtNome != null && !edtNome.getText().trim().equals("")) {
-            validarUsuario = new ValidarUsuario(this::observadorCriarSala, edtNome.getText());
-            validarUsuario.executar();
+            new ValidarUsuario(new ObservadorCriarSala(), getUsuario()).executar();
         } else {
             Dialogo.atencao("Informe um nome de usuário para continuar!");
         }
 
         event.consume();
+    }
+
+    private Usuario getUsuario() {
+        Usuario usuario = form.getUsuario();
+        if (usuario == null)
+            return new Usuario(edtNome.getText());
+        else
+            return new Usuario(usuario.getId(), edtNome.getText());
     }
 
     private void clicarProcurarSala(ActionEvent event) {
         if (edtNome != null && !edtNome.getText().trim().equals("")) {
-            validarUsuario = new ValidarUsuario(this::observadorProcurarSala, edtNome.getText());
-            validarUsuario.executar();
+            new ValidarUsuario(new ObservadorProcurarSala(), getUsuario()).executar();
         } else {
             Dialogo.atencao("Informe um nome de usuário para continuar!");
         }
@@ -82,20 +86,38 @@ public class PainelMenu extends AnchorPane {
         event.consume();
     }
 
-    private void observadorProcurarSala(boolean resultado, Usuario usuario) {
-        if (resultado) {
-            validarUsuario.parar();
-            form.setUsuario(usuario);
-            form.mudarParaPainelProcurarSala();
-        }
-    }
+    private class ObservadorCriarSala implements Observador<Usuario> {
 
-    private void observadorCriarSala(boolean resultado, Usuario usuario) {
-        if (resultado) {
-            validarUsuario.parar();
+        @Override
+        public void sucesso(Usuario usuario) {
             form.setUsuario(usuario);
             form.mudarParaPainelCriarSala();
         }
+
+        @Override
+        public void erro(String mensagem) {
+            exibirErro(mensagem);
+        }
     }
 
+    private void exibirErro(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Atenção");
+        alert.setHeaderText(mensagem);
+        alert.show();
+    }
+
+    private class ObservadorProcurarSala implements Observador<Usuario> {
+
+        @Override
+        public void sucesso(Usuario usuario) {
+            form.setUsuario(usuario);
+            form.mudarParaPainelProcurarSala();
+        }
+
+        @Override
+        public void erro(String mensagem) {
+            exibirErro(mensagem);
+        }
+    }
 }

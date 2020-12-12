@@ -29,9 +29,9 @@ public class ListarSalas extends ComunicacaoBase {
         JSONObject json = new JSONObject(resposta);
 
         if (json.getBoolean("resultado"))
-            observador.atualizar(true, carregarSalas(json.getJSONArray("salas")));
+            observador.sucesso(carregarSalas(json.getJSONArray("salas")));
         else
-            observador.atualizar(false, null);
+            observador.sucesso(null);
     }
 
     private List<Sala> carregarSalas(JSONArray jsonArray) {
