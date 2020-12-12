@@ -49,8 +49,12 @@ public abstract class ComunicacaoBase<T> implements Runnable {
                 callback(reader.readUTF());
             }
         } catch (IOException e) {
-
+            tratarErro();
         }
+    }
+
+    protected void tratarErro() {
+        
     }
 
     public final void parar() {
