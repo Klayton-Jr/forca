@@ -28,7 +28,7 @@ public class ValidaUsuarioServico implements Servico {
 
         for (Usuario usuario : usuarios) {
             if (usuario.getNome().equals(usuarioLogin.getNome()))
-                new JSONObject().put("resultado", false).put("mensagem", "Já existe um usuário com este nome");
+                return new JSONObject().put("resultado", false).put("mensagem", "Já existe um usuário com este nome").toString();
         }
 
 
