@@ -48,7 +48,7 @@ public class ListarSalas extends ComunicacaoBase<List<Sala>> {
         List<Sala> salas = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.length(); i++) {
-            salas.add(FabricaObjetos.criarSalaDeJson(jsonArray.getJSONObject(i)));
+            salas.add(FabricaObjetos.criarSalaDeJSON(jsonArray.getJSONObject(i)));
         }
 
         return salas;

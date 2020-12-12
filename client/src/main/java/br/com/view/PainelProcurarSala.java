@@ -2,15 +2,13 @@ package br.com.view;
 
 import br.com.comunicacao.EntrarSala;
 import br.com.comunicacao.ListarSalas;
-import br.com.model.LoginSala;
+import br.com.model.ParametrosTelas;
 import br.com.model.Observador;
 import br.com.model.Sala;
 import br.com.view.componente.ColumnGrid;
 import br.com.view.componente.Tabela;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.List;
@@ -40,10 +38,9 @@ public class PainelProcurarSala extends AnchorPane {
         getChildren().add(btnEntrar);
 
         tabelaSalas = new Tabela<>();
-        tabelaSalas.addColumn(new ColumnGrid<>("ID", "id"), 0.1);
         tabelaSalas.addColumn(new ColumnGrid<>("Nome", "nome"), 0.4);
-        tabelaSalas.addColumn(new ColumnGrid<>("Usuários na Sala", "numeroAtualUsuario"), 0.23);
-        tabelaSalas.addColumn(new ColumnGrid<>("Número Máximo de Usuário", "numeroMaximoUsuario"), 0.23);
+        tabelaSalas.addColumn(new ColumnGrid<>("Usuários na Sala", "numeroAtualUsuario"), 0.28);
+        tabelaSalas.addColumn(new ColumnGrid<>("Número Máximo de Usuário", "numeroMaximoUsuario"), 0.28);
 
         AnchorPane.setTopAnchor(tabelaSalas, 50.0);
         AnchorPane.setLeftAnchor(tabelaSalas, 10.0);
@@ -53,7 +50,7 @@ public class PainelProcurarSala extends AnchorPane {
     }
 
     public void atualizar() {
-        listarSalas = new ListarSalas(new ObservadorCriarSalas());
+        listarSalas = new ListarSalas(new ObservadorListarSalas());
         new Thread(listarSalas).start();
     }
 
@@ -64,18 +61,13 @@ public class PainelProcurarSala extends AnchorPane {
     }
 
     private void clicarEntrarSala(ActionEvent event) {
-        new Thread(new EntrarSala(new ObservadorEntrarSala(), getLoginSala())).start();
+        form.setSala(tabelaSalas.getSelectionModel().getSelectedItem());
+
+        new Thread(new EntrarSala(new ObservadorEntrarSala(), form.getParametrosTelas())).start();
         event.consume();
     }
 
-    private LoginSala getLoginSala() {
-        LoginSala loginSala = new LoginSala();
-        loginSala.setSalaID(form.getSala().getId());
-        loginSala.setUsuarioID(form.getUsuario().getId());
-        return loginSala;
-    }
-
-    private class ObservadorCriarSalas implements Observador<List<Sala>> {
+    private class ObservadorListarSalas implements Observador<List<Sala>> {
 
         @Override
         public void sucesso(List<Sala> salas) {
@@ -92,6 +84,7 @@ public class PainelProcurarSala extends AnchorPane {
     private class ObservadorEntrarSala implements Observador<Sala> {
         @Override
         public void sucesso(Sala sala) {
+            listarSalas.parar();
             form.setSala(sala);
             form.mudarParaPainelSala();
         }

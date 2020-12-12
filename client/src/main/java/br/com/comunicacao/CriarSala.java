@@ -3,7 +3,11 @@ package br.com.comunicacao;
 import br.com.factory.FabricaObjetos;
 import br.com.model.Observador;
 import br.com.model.Sala;
+import br.com.model.Usuario;
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class CriarSala extends ComunicacaoBase<Sala> {
 
@@ -27,7 +31,20 @@ public class CriarSala extends ComunicacaoBase<Sala> {
                 .put("usuarioDonoID", sala.getUsuarioDonoID())
                 .put("numeroMaximoUsuario", sala.getNumeroMaximoUsuario())
                 .put("numeroTotalRodadas", sala.getNumeroTotalRodadas())
-                .put("tempoRespostaLetra", sala.getTempoRespostaLetra());
+                .put("tempoRespostaLetra", sala.getTempoRespostaLetra())
+                .put("usuarios", getUsuarios(sala.getUsuarios()));
+    }
+
+    private JSONArray getUsuarios(List<Usuario> usuarios) {
+        JSONArray jsonUsuarios = new JSONArray();
+
+        for (Usuario usuario : usuarios) {
+            jsonUsuarios.put(new JSONObject()
+                    .put("id", usuario.getId())
+                    .put("nome", usuario.getNome()));
+        }
+
+        return jsonUsuarios;
     }
 
     @Override
@@ -42,6 +59,6 @@ public class CriarSala extends ComunicacaoBase<Sala> {
     }
 
     private Sala carregarSala(JSONObject jsonSala) {
-        return FabricaObjetos.criarSalaDeJson(jsonSala);
+        return FabricaObjetos.criarSalaDeJSON(jsonSala);
     }
 }

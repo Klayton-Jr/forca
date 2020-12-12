@@ -1,5 +1,6 @@
 package br.com.factory;
 
+import br.com.model.ParametrosTelas;
 import br.com.model.Sala;
 import br.com.model.Situacao;
 import br.com.model.Usuario;
@@ -8,9 +9,10 @@ import org.json.JSONObject;
 
 public class FabricaObjetos {
 
-    public static Sala criarSalaDeJson(JSONObject jsonObject) {
+    public static Sala criarSalaDeJSON(JSONObject jsonObject) {
         Sala sala = new Sala();
         sala.setId(jsonObject.getString("id"));
+        sala.setUsuarioDonoID(jsonObject.getString("usuarioDonoID"));
         sala.setNome(jsonObject.getString("nome"));
         sala.setNumeroMaximoUsuario(jsonObject.getInt("numeroMaximoUsuario"));
         sala.setNumeroAtualUsuario(jsonObject.getInt("numeroAtualUsuario"));
@@ -23,13 +25,20 @@ public class FabricaObjetos {
 
         if (usuariosJSON != null) {
             for (int i = 0; i < usuariosJSON.length(); i++) {
-                sala.getUsuarios().add(criarUsuarioDeJson(usuariosJSON.getJSONObject(i)));
+                sala.getUsuarios().add(criarUsuarioDeJSON(usuariosJSON.getJSONObject(i)));
             }
         }
         return sala;
     }
 
-    public static Usuario criarUsuarioDeJson(JSONObject jsonObject) {
+    public static Usuario criarUsuarioDeJSON(JSONObject jsonObject) {
         return new Usuario(jsonObject.getString("id"), jsonObject.getString("nome"));
+    }
+
+    public static ParametrosTelas criarParametrosDeJSON(JSONObject json) {
+        ParametrosTelas parametros = new ParametrosTelas();
+        parametros.setSala(criarSalaDeJSON(json.getJSONObject("sala")));
+        parametros.setUsuario(criarUsuarioDeJSON(json.getJSONObject("usuario")));
+        return parametros;
     }
 }

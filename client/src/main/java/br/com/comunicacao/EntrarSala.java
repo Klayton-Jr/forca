@@ -1,32 +1,34 @@
 package br.com.comunicacao;
 
 import br.com.factory.FabricaObjetos;
-import br.com.model.LoginSala;
+import br.com.model.ParametrosTelas;
 import br.com.model.Observador;
 import br.com.model.Sala;
 import org.json.JSONObject;
 
 public class EntrarSala extends ComunicacaoBase<Sala> {
 
-    private final LoginSala loginSala;
+    private final ParametrosTelas parametrosTelas;
 
-    public EntrarSala(Observador<Sala> observador, LoginSala loginSala) {
+    public EntrarSala(Observador<Sala> observador, ParametrosTelas parametrosTelas) {
         super(observador);
-        this.loginSala = loginSala;
+        this.parametrosTelas = parametrosTelas;
     }
 
     @Override
     protected void executar() {
         enviarRequisicao(new JSONObject()
-                .put("requisicao", "entrarSala")
+                .put("requisicao", "EntrarSala")
                 .put("dados", getJsonDados())
                 .toString());
     }
 
     private JSONObject getJsonDados() {
         return new JSONObject()
-                .put("usuarioID", loginSala.getUsuarioID())
-                .put("salaID", loginSala.getSalaID());
+                .put("nomeUsuario", parametrosTelas.getUsuario().getNome())
+                .put("usuarioID", parametrosTelas.getUsuario().getId())
+                .put("nomeSala", parametrosTelas.getSala().getNome())
+                .put("salaID", parametrosTelas.getSala().getId());
     }
 
     @Override
@@ -41,6 +43,6 @@ public class EntrarSala extends ComunicacaoBase<Sala> {
     }
 
     private Sala carregarSala(JSONObject jsonSala) {
-        return FabricaObjetos.criarSalaDeJson(jsonSala);
+        return FabricaObjetos.criarSalaDeJSON(jsonSala);
     }
 }

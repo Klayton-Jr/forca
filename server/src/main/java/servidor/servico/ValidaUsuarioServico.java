@@ -4,13 +4,20 @@ import org.json.JSONObject;
 import servidor.CacheObjetos;
 import servidor.model.Usuario;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.List;
 import java.util.UUID;
 
-public class ValidaUsuarioServico implements Servico {
+public class ValidaUsuarioServico extends Servico {
+
+    public ValidaUsuarioServico(Socket socket, DataOutputStream writer) {
+        super(socket, writer);
+    }
 
     @Override
-    public String executar(JSONObject json) {
+    public boolean executar(JSONObject json) throws IOException {
         Usuario usuarioLogin = new Usuario(json.optString("id", UUID.randomUUID().toString()), json.getString("nome"));
         CacheObjetos cacheObjetos = CacheObjetos.getInstance();
 
@@ -20,23 +27,21 @@ public class ValidaUsuarioServico implements Servico {
             usuarios.remove(usuarioLogin);
             usuarios.add(usuarioLogin);
 
-            return new JSONObject().put("resultado", true)
+            return enviar(new JSONObject().put("resultado", true)
                     .put("usuario", new JSONObject().put("id", usuarioLogin.getId())
-                    .put("nome", usuarioLogin.getNome()))
-                    .toString();
+                    .put("nome", usuarioLogin.getNome())));
         }
 
         for (Usuario usuario : usuarios) {
             if (usuario.getNome().equals(usuarioLogin.getNome()))
-                return new JSONObject().put("resultado", false).put("mensagem", "Já existe um usuário com este nome").toString();
+                return enviar(new JSONObject().put("resultado", false).put("mensagem", "Já existe um usuário com este nome"));
         }
 
 
         usuarios.add(usuarioLogin);
 
-        return new JSONObject().put("resultado", true)
+        return enviar(new JSONObject().put("resultado", true)
                 .put("usuario", new JSONObject().put("id", usuarioLogin.getId())
-                        .put("nome", usuarioLogin.getNome()))
-                .toString();
+                        .put("nome", usuarioLogin.getNome())));
     }
 }

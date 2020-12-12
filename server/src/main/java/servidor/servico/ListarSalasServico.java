@@ -3,49 +3,37 @@ package servidor.servico;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import servidor.CacheObjetos;
+import servidor.FabricaJSON;
 import servidor.model.Sala;
 import servidor.model.Situacao;
-import servidor.model.Usuario;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ListarSalasServico implements Servico {
+public class ListarSalasServico extends Servico {
+
+    public ListarSalasServico(Socket socket, DataOutputStream writer) {
+        super(socket, writer);
+    }
 
     @Override
-    public String executar(JSONObject json) {
-        return new JSONObject().put("resultado", true).put("salas", getSalas()).toString();
+    public boolean executar(JSONObject json) throws IOException {
+        while(isConnected()) {
+            enviar(new JSONObject()
+                    .put("resultado", true)
+                    .put("salas", getSalas()));
+            sleep(5000);
+        }
+
+        return true;
     }
 
     private JSONArray getSalas() {
         List<Sala> salas = CacheObjetos.getInstance().getSalas().stream().filter(sala -> Situacao.EM_ESPERA == sala.getSituacao()).collect(Collectors.toList());
-        JSONArray salasJSON = new JSONArray();
-
-        for (Sala sala : salas) {
-            salasJSON.put(new JSONObject()
-                    .put("id", sala.getId())
-                    .put("usuarioDonoID", sala.getUsuarioDonoID())
-                    .put("nome", sala.getNome())
-                    .put("numeroMaximoUsuario", sala.getNumeroMaximoUsuario())
-                    .put("numeroAtualUsuario", sala.getNumeroAtualUsuario())
-                    .put("numeroTotalRodadas", sala.getNumeroTotalRodadas())
-                    .put("numeroAtualRodada", sala.getNumeroAtualRodada())
-                    .put("tempoRespostaLetra", sala.getTempoRespostaLetra())
-                    .put("situacao", sala.getSituacao().toString())
-                    .put("usuarios", getUsuarios(sala.getUsuarios())));
-        }
-        return salasJSON;
+        return FabricaJSON.getSalas(salas);
     }
 
-    private JSONArray getUsuarios(List<Usuario> usuarios) {
-        JSONArray jsonUsuarios = new JSONArray();
-
-        for (Usuario usuario : usuarios) {
-            jsonUsuarios.put(new JSONObject()
-                    .put("id", usuario.getId())
-                    .put("nome", usuario.getNome()));
-        }
-
-        return jsonUsuarios;
-    }
 }

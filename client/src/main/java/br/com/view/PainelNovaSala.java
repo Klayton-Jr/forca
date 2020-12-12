@@ -10,6 +10,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class PainelNovaSala extends AnchorPane {
 
     private TextField edtNomeSala;
@@ -113,7 +116,8 @@ public class PainelNovaSala extends AnchorPane {
     }
 
     private void clicarCriarSala(ActionEvent event) {
-        new Thread(new CriarSala(new Obsevador(), getSala())).start();
+        form.setSala(getSala());
+        new Thread(new CriarSala(new ObservadorNovaSala(), form.getSala())).start();
         event.consume();
     }
 
@@ -124,10 +128,11 @@ public class PainelNovaSala extends AnchorPane {
         sala.setNumeroMaximoUsuario(edtQuantidadeMaximaJogadores.getInt());
         sala.setNumeroTotalRodadas(edtNumeroRodadas.getInt());
         sala.setTempoRespostaLetra(edtTempoResponderCadaLetra.getInt());
+        sala.setUsuarios(Collections.singletonList(form.getUsuario()));
         return sala;
     }
 
-    private class Obsevador implements Observador<Sala> {
+    private class ObservadorNovaSala implements Observador<Sala> {
         @Override
         public void sucesso(Sala sala) {
             form.setSala(sala);

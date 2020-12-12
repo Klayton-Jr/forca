@@ -44,9 +44,12 @@ public abstract class ComunicacaoBase<T> implements Runnable {
     public final void enviarRequisicao(String json) {
         try {
             writer.writeUTF(json);
-            callback(reader.readUTF());
+
+            while (client.isConnected()) {
+                callback(reader.readUTF());
+            }
         } catch (IOException e) {
-            erro(e.getMessage());
+
         }
     }
 

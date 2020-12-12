@@ -37,6 +37,6 @@ public class ValidarUsuario extends ComunicacaoBase<Usuario> {
     }
 
     private Usuario carregarUsuario(JSONObject json) {
-        return FabricaObjetos.criarUsuarioDeJson(json);
+        return FabricaObjetos.criarUsuarioDeJSON(json);
     }
 }

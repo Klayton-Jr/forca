@@ -1,5 +1,6 @@
 package br.com.view;
 
+import br.com.model.ParametrosTelas;
 import br.com.model.Sala;
 import br.com.model.Usuario;
 import javafx.application.Application;
@@ -10,8 +11,7 @@ import javafx.stage.Stage;
 
 public class Formulario extends Application {
 
-    private Usuario usuario;
-    private Sala sala;
+    private final ParametrosTelas parametros = new ParametrosTelas();
 
     private Stage stage;
     private Scene menuScene;
@@ -22,6 +22,7 @@ public class Formulario extends Application {
     private PainelNovaSala painelNovaSala;
     private PainelProcurarSala painelProcurarSala;
     private PainelSala painelSala;
+
 
     @Override
     public void start(Stage stage) {
@@ -87,27 +88,36 @@ public class Formulario extends Application {
         if (salaScene == null)
             salaScene = new Scene(getPainelSala());
 
-        painelSala.atualizar(this.sala);
+        painelSala.iniciarServico();
 
         stage.setScene(salaScene);
         stage.setTitle("Sala");
         stage.show();
     }
 
+    public ParametrosTelas getParametrosTelas() {
+        return parametros;
+    }
+
+    public void setParametrosTelas(ParametrosTelas parametrosTelas) {
+        this.parametros.setSala(parametrosTelas.getSala());
+        this.parametros.setUsuario(parametrosTelas.getUsuario());
+    }
+
     public Usuario getUsuario() {
-        return usuario;
+        return parametros.getUsuario();
     }
 
     public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+        this.parametros.setUsuario(usuario);
     }
 
     public Sala getSala() {
-        return sala;
+        return parametros.getSala();
     }
 
     public void setSala(Sala sala) {
-        this.sala = sala;
+        this.parametros.setSala(sala);
     }
 
     public final void exibirErro(String mensagem) {
@@ -120,4 +130,5 @@ public class Formulario extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }
