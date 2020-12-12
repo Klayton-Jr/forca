@@ -1,11 +1,12 @@
 package br.com.view;
 
 import br.com.comunicacao.CarregarSala;
+import br.com.comunicacao.IniciarJogo;
 import br.com.model.*;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 public class PainelSala extends AnchorPane {
@@ -13,6 +14,9 @@ public class PainelSala extends AnchorPane {
     private final Formulario form;
     private TreeItem<Usuario> noRaiz;
     private Button btnIniciarJogo;
+    private Label lblMensagem;
+    private TextField edtResposta;
+    private Button btnEnviar;
 
     public PainelSala(Formulario form) {
         this.form = form;
@@ -43,12 +47,29 @@ public class PainelSala extends AnchorPane {
         AnchorPane.setBottomAnchor(treeViewUsuarios, 0.0);
         getChildren().add(treeViewUsuarios);
 
-        AnchorPane painelJogo = new AnchorPane();
-        AnchorPane.setLeftAnchor(painelJogo, 150.0);
-        AnchorPane.setTopAnchor(painelJogo, 50.0);
-        AnchorPane.setRightAnchor(painelJogo, 0.0);
-        AnchorPane.setBottomAnchor(painelJogo, 0.0);
-        getChildren().add(painelJogo);
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/img/aguardando.png")));
+        AnchorPane.setTopAnchor(imageView, 50.0);
+        AnchorPane.setLeftAnchor(imageView, 165.0);
+        getChildren().add(imageView);
+
+        lblMensagem = new Label("Aguardando outros jogadores");
+        lblMensagem.setStyle("-fx-alignment: center; -fx-text-fill: blue; -fx-font-size: 2em;");
+        AnchorPane.setLeftAnchor(lblMensagem, 165.0);
+        AnchorPane.setRightAnchor(lblMensagem, 15.0);
+        AnchorPane.setBottomAnchor(lblMensagem, 67.0);
+        getChildren().add(lblMensagem);
+
+        edtResposta = new TextField();
+        edtResposta.setEditable(false);
+        AnchorPane.setLeftAnchor(edtResposta, 160.0);
+        AnchorPane.setRightAnchor(edtResposta, 65.0);
+        AnchorPane.setBottomAnchor(edtResposta, 10.0);
+        getChildren().add(edtResposta);
+
+        btnEnviar = new Button("Enviar");
+        AnchorPane.setRightAnchor(btnEnviar, 10.0);
+        AnchorPane.setBottomAnchor(btnEnviar, 10.0);
+        getChildren().add(btnEnviar);
 
     }
 
@@ -57,7 +78,7 @@ public class PainelSala extends AnchorPane {
     }
 
     private void inicarJogo(ActionEvent actionEvent) {
-
+        new Thread(new IniciarJogo(new ObservadorIniciarJogo(), form.getParametrosTelas())).start();
     }
 
     private void atualizar() {
@@ -86,6 +107,19 @@ public class PainelSala extends AnchorPane {
         public void sucesso(ParametrosTelas parametros) {
             form.setParametrosTelas(parametros);
             atualizar();
+        }
+
+        @Override
+        public void erro(String mensagem) {
+            form.exibirErro(mensagem);
+        }
+    }
+
+    private class ObservadorIniciarJogo implements Observador<Boolean> {
+
+        @Override
+        public void sucesso(Boolean resultado) {
+
         }
 
         @Override

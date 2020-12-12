@@ -54,7 +54,7 @@ public abstract class ComunicacaoBase<T> implements Runnable {
     }
 
     protected void tratarErro() {
-        
+
     }
 
     public final void parar() {

@@ -30,7 +30,7 @@ public class CarregarSalaServico extends Servico {
             enviar(new JSONObject()
                     .put("resultado", true)
                     .put("parametros", getParametros(sala, usuario)));
-            sleep(5000);
+            sleep(2000);
         }
 
         return true;
