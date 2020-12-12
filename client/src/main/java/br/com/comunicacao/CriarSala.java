@@ -5,26 +5,26 @@ import br.com.model.Observador;
 import br.com.model.Sala;
 import org.json.JSONObject;
 
-public class CriarSala extends ComunicacaoBase {
+public class CriarSala extends ComunicacaoBase<Sala> {
 
-    private final Observador<Sala> observador;
     private final Sala sala;
 
     public CriarSala(Observador<Sala> observador, Sala sala) {
-        this.observador = observador;
+        super(observador);
         this.sala = sala;
     }
 
     @Override
-    public void executar() {
+    protected void executar() {
         enviarRequisicao(new JSONObject()
-                .put("requisicao", "criarSala")
-                .put("sala", getSalaJSON())
+                .put("requisicao", "CriarSala")
+                .put("dados", getSalaJSON())
                 .toString());
     }
 
     private JSONObject getSalaJSON() {
         return new JSONObject().put("nome", sala.getNome())
+                .put("usuarioDonoID", sala.getUsuarioDonoID())
                 .put("numeroMaximoUsuario", sala.getNumeroMaximoUsuario())
                 .put("numeroTotalRodadas", sala.getNumeroTotalRodadas())
                 .put("tempoRespostaLetra", sala.getTempoRespostaLetra());
@@ -35,9 +35,10 @@ public class CriarSala extends ComunicacaoBase {
         JSONObject json = new JSONObject(resposta);
 
         if (json.getBoolean("resultado"))
-            observador.sucesso(carregarSala(json.getJSONObject("sala")));
+            sucesso(carregarSala(json.getJSONObject("sala")));
         else
-            observador.erro(null);
+            erro(json.getString("mensagem"));
+        parar();
     }
 
     private Sala carregarSala(JSONObject jsonSala) {

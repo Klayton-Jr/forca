@@ -6,18 +6,17 @@ import br.com.model.Observador;
 import br.com.model.Sala;
 import org.json.JSONObject;
 
-public class EntrarSala extends ComunicacaoBase {
+public class EntrarSala extends ComunicacaoBase<Sala> {
 
-    private final Observador<Sala> observador;
-    private LoginSala loginSala;
+    private final LoginSala loginSala;
 
     public EntrarSala(Observador<Sala> observador, LoginSala loginSala) {
-        this.observador = observador;
+        super(observador);
         this.loginSala = loginSala;
     }
 
     @Override
-    public void executar() {
+    protected void executar() {
         enviarRequisicao(new JSONObject()
                 .put("requisicao", "entrarSala")
                 .put("dados", getJsonDados())
@@ -35,9 +34,10 @@ public class EntrarSala extends ComunicacaoBase {
         JSONObject json = new JSONObject(resposta);
 
         if (json.getBoolean("resultado"))
-            observador.sucesso(carregarSala(json.getJSONObject("sala")));
+            sucesso(carregarSala(json.getJSONObject("sala")));
         else
-            observador.sucesso(null);
+            erro(json.getString("mensagem"));
+        parar();
     }
 
     private Sala carregarSala(JSONObject jsonSala) {

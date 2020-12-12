@@ -9,18 +9,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListarSalas extends ComunicacaoBase {
-
-    private final Observador<List<Sala>> observador;
+public class ListarSalas extends ComunicacaoBase<List<Sala>> {
 
     public ListarSalas(Observador<List<Sala>> observador) {
-        this.observador = observador;
+        super(observador);
     }
 
     @Override
-    public void executar() {
+    protected void executar() {
         enviarRequisicao(new JSONObject()
-                .put("requisicao", "listarSalas")
+                .put("requisicao", "ListarSalas")
+                .put("dados", new JSONObject())
                 .toString());
     }
 
@@ -29,9 +28,20 @@ public class ListarSalas extends ComunicacaoBase {
         JSONObject json = new JSONObject(resposta);
 
         if (json.getBoolean("resultado"))
-            observador.sucesso(carregarSalas(json.getJSONArray("salas")));
+            sucesso(carregarSalas(json.getJSONArray("salas")));
         else
-            observador.sucesso(null);
+            erro(json.getString("mensagem"));
+
+        reexecutar();
+    }
+
+    private void reexecutar() {
+        try {
+            Thread.sleep(5000);
+            executar();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<Sala> carregarSalas(JSONArray jsonArray) {

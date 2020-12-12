@@ -3,7 +3,7 @@ package br.com.model;
 public class LoginSala {
 
     private String usuarioID;
-    private long salaID;
+    private String salaID;
 
     public String getUsuarioID() {
         return usuarioID;
@@ -13,11 +13,11 @@ public class LoginSala {
         this.usuarioID = usuarioID;
     }
 
-    public long getSalaID() {
+    public String getSalaID() {
         return salaID;
     }
 
-    public void setSalaID(long salaID) {
+    public void setSalaID(String salaID) {
         this.salaID = salaID;
     }
 }

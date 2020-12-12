@@ -4,6 +4,7 @@ import br.com.model.Sala;
 import br.com.model.Usuario;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -74,8 +75,8 @@ public class Formulario extends Application {
     void mudarParaPainelProcurarSala() {
         if (procurarSalaScene == null)
             procurarSalaScene = new Scene(getPainelProcurarSala());
-        else
-            painelProcurarSala.atualizar();
+
+        painelProcurarSala.atualizar();
 
         stage.setScene(procurarSalaScene);
         stage.setTitle("Salas");
@@ -107,6 +108,13 @@ public class Formulario extends Application {
 
     public void setSala(Sala sala) {
         this.sala = sala;
+    }
+
+    public final void exibirErro(String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Atenção");
+        alert.setHeaderText(mensagem);
+        alert.show();
     }
 
     public static void main(String[] args) {

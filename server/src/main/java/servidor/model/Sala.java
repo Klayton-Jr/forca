@@ -1,4 +1,4 @@
-package br.com.model;
+package servidor.model;
 
 import java.util.ArrayList;
 import java.util.List;

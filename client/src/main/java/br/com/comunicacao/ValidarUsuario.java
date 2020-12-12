@@ -5,18 +5,17 @@ import br.com.model.Observador;
 import br.com.model.Usuario;
 import org.json.JSONObject;
 
-public class ValidarUsuario extends ComunicacaoBase {
+public class ValidarUsuario extends ComunicacaoBase<Usuario> {
 
-    private final Observador<Usuario> observador;
     private final Usuario usuario;
 
     public ValidarUsuario(Observador<Usuario> observador, Usuario usuario) {
-        this.observador = observador;
+        super(observador);
         this.usuario = usuario;
     }
 
     @Override
-    public void executar() {
+    protected void executar() {
         enviarRequisicao(new JSONObject()
                 .put("requisicao", "ValidarUsuario")
                 .put("dados", new JSONObject().
@@ -30,9 +29,9 @@ public class ValidarUsuario extends ComunicacaoBase {
         JSONObject json = new JSONObject(resposta);
 
         if (json.getBoolean("resultado"))
-            observador.sucesso(carregarUsuario(json.getJSONObject("usuario")));
+            sucesso(carregarUsuario(json.getJSONObject("usuario")));
         else
-            observador.erro(json.getString("mensagem"));
+            erro(json.getString("mensagem"));
 
         parar();
     }

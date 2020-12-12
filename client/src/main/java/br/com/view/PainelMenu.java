@@ -60,7 +60,7 @@ public class PainelMenu extends AnchorPane {
 
     private void clicarCriarSala(ActionEvent event) {
         if (edtNome != null && !edtNome.getText().trim().equals("")) {
-            new ValidarUsuario(new ObservadorCriarSala(), getUsuario()).executar();
+            new Thread(new ValidarUsuario(new ObservadorCriarSala(), getUsuario())).start();
         } else {
             Dialogo.atencao("Informe um nome de usuário para continuar!");
         }
@@ -78,7 +78,7 @@ public class PainelMenu extends AnchorPane {
 
     private void clicarProcurarSala(ActionEvent event) {
         if (edtNome != null && !edtNome.getText().trim().equals("")) {
-            new ValidarUsuario(new ObservadorProcurarSala(), getUsuario()).executar();
+            new Thread(new ValidarUsuario(new ObservadorProcurarSala(), getUsuario())).start();
         } else {
             Dialogo.atencao("Informe um nome de usuário para continuar!");
         }
@@ -96,16 +96,11 @@ public class PainelMenu extends AnchorPane {
 
         @Override
         public void erro(String mensagem) {
-            exibirErro(mensagem);
+            form.exibirErro(mensagem);
         }
     }
 
-    private void exibirErro(String mensagem) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Atenção");
-        alert.setHeaderText(mensagem);
-        alert.show();
-    }
+
 
     private class ObservadorProcurarSala implements Observador<Usuario> {
 
@@ -117,7 +112,7 @@ public class PainelMenu extends AnchorPane {
 
         @Override
         public void erro(String mensagem) {
-            exibirErro(mensagem);
+            form.exibirErro(mensagem);
         }
     }
 }

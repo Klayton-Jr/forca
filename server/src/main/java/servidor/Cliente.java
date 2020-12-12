@@ -1,6 +1,8 @@
 package servidor;
 
 import org.json.JSONObject;
+import servidor.servico.CriarSalaServico;
+import servidor.servico.ListarSalasServico;
 import servidor.servico.Servico;
 import servidor.servico.ValidaUsuarioServico;
 
@@ -21,23 +23,28 @@ public class Cliente implements Runnable {
         try (DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
              DataInputStream reader = new DataInputStream(socket.getInputStream())) {
 
-            JSONObject json = new JSONObject(reader.readUTF());
-            String requisicao = json.getString("requisicao");
+            while(socket.isConnected()) {
+                JSONObject json = new JSONObject(reader.readUTF());
+                String requisicao = json.getString("requisicao");
 
-            System.out.println("Requisição solicitada: " + requisicao);
+                System.out.println("Requisição solicitada: " + requisicao);
 
-            Servico servico = null;
+                Servico servico = null;
 
-            if ("ValidarUsuario".equalsIgnoreCase(requisicao)) {
-                servico = new ValidaUsuarioServico();
+                if ("ValidarUsuario".equalsIgnoreCase(requisicao)) {
+                    servico = new ValidaUsuarioServico();
+                } else if ("CriarSala".equalsIgnoreCase(requisicao)) {
+                    servico = new CriarSalaServico();
+                } else if ("ListarSalas".equalsIgnoreCase(requisicao)) {
+                    servico = new ListarSalasServico();
+                }
+
+                if (servico != null) {
+                    writer.writeUTF(servico.executar(json.getJSONObject("dados")));
+                } else {
+                    writer.writeUTF(new JSONObject().put("resultado", false).put("erro", "Não foi possível localizar requisição solicitada").toString());
+                }
             }
-
-            if (servico != null) {
-                writer.writeUTF(servico.executar(json.getJSONObject("dados")));
-            } else {
-                writer.writeUTF(new JSONObject().put("resultado", false).put("erro", "Não foi possível localizar requisição solicitada").toString());
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

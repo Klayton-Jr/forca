@@ -12,14 +12,11 @@ import javafx.scene.layout.AnchorPane;
 
 public class PainelNovaSala extends AnchorPane {
 
-    private Button btnVoltar;
-    private Button btnCriarSala;
     private TextField edtNomeSala;
     private IntTextField edtQuantidadeMaximaJogadores;
     private IntTextField edtNumeroRodadas;
     private IntTextField edtTempoResponderCadaLetra;
-    private Formulario form;
-    private CriarSala criarSala;
+    private final Formulario form;
 
     public PainelNovaSala(Formulario form) {
         this.form = form;
@@ -27,13 +24,13 @@ public class PainelNovaSala extends AnchorPane {
     }
 
     private void inicializar() {
-        btnVoltar = new Button("Voltar");
+        Button btnVoltar = new Button("Voltar");
         btnVoltar.setOnAction(this::clicarVoltar);
         AnchorPane.setTopAnchor(btnVoltar, 10.0);
         AnchorPane.setLeftAnchor(btnVoltar, 10.0);
         getChildren().add(btnVoltar);
 
-        btnCriarSala = new Button("Criar");
+        Button btnCriarSala = new Button("Criar");
         btnCriarSala.setOnAction(this::clicarCriarSala);
         AnchorPane.setTopAnchor(btnCriarSala, 10.0);
         AnchorPane.setRightAnchor(btnCriarSala, 10.0);
@@ -116,13 +113,13 @@ public class PainelNovaSala extends AnchorPane {
     }
 
     private void clicarCriarSala(ActionEvent event) {
-        criarSala = new CriarSala(new Obsevador(), getSala());
-        criarSala.executar();
+        new Thread(new CriarSala(new Obsevador(), getSala())).start();
         event.consume();
     }
 
     private Sala getSala() {
         Sala sala = new Sala();
+        sala.setUsuarioDonoID(form.getUsuario().getId());
         sala.setNome(edtNomeSala.getText());
         sala.setNumeroMaximoUsuario(edtQuantidadeMaximaJogadores.getInt());
         sala.setNumeroTotalRodadas(edtNumeroRodadas.getInt());
@@ -133,14 +130,13 @@ public class PainelNovaSala extends AnchorPane {
     private class Obsevador implements Observador<Sala> {
         @Override
         public void sucesso(Sala sala) {
-            criarSala.parar();
             form.setSala(sala);
             form.mudarParaPainelSala();
         }
 
         @Override
         public void erro(String mensagem) {
-
+            form.exibirErro(mensagem);
         }
     }
 }

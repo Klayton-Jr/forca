@@ -1,19 +1,24 @@
 package br.com.comunicacao;
 
+import br.com.model.Observador;
+import javafx.application.Platform;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public abstract class ComunicacaoBase {
+public abstract class ComunicacaoBase<T> implements Runnable {
 
     public static final String HOST = "localhost";
     public static final int PORT = 7070;
+    private final Observador<T> observador;
     private DataOutputStream writer;
     private DataInputStream reader;
     private Socket client;
 
-    public ComunicacaoBase() {
+    public ComunicacaoBase(Observador<T> observador) {
+        this.observador = observador;
         inicializar();
     }
 
@@ -23,11 +28,16 @@ public abstract class ComunicacaoBase {
             writer = new DataOutputStream(client.getOutputStream());
             reader = new DataInputStream(client.getInputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            erro(e.getMessage());
         }
     }
 
-    public abstract void executar();
+    @Override
+    public void run() {
+        executar();
+    }
+
+    protected abstract void executar();
 
     public abstract void callback(String resposta);
 
@@ -36,7 +46,7 @@ public abstract class ComunicacaoBase {
             writer.writeUTF(json);
             callback(reader.readUTF());
         } catch (IOException e) {
-            e.printStackTrace();
+            erro(e.getMessage());
         }
     }
 
@@ -51,8 +61,16 @@ public abstract class ComunicacaoBase {
             if (client != null && !client.isClosed())
                 client.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            erro(e.getMessage());
         }
+    }
+
+    protected final void sucesso(T t) {
+        Platform.runLater(()-> observador.sucesso(t));
+    }
+
+    protected final void erro(String mensagem) {
+        observador.erro(mensagem);
     }
 
 }

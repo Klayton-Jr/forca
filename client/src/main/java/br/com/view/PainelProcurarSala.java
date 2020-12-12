@@ -17,12 +17,9 @@ import java.util.List;
 
 public class PainelProcurarSala extends AnchorPane {
 
-    private Button btnVoltar;
-    private Button btnEntrar;
     private Tabela<Sala> tabelaSalas;
-    private Formulario form;
+    private final Formulario form;
     private ListarSalas listarSalas;
-    private EntrarSala entrarSala;
 
     public PainelProcurarSala(Formulario form) {
         this.form = form;
@@ -30,13 +27,13 @@ public class PainelProcurarSala extends AnchorPane {
     }
 
     private void inicializar() {
-        btnVoltar = new Button("Voltar");
+        Button btnVoltar = new Button("Voltar");
         btnVoltar.setOnAction(this::clicarVoltar);
         AnchorPane.setTopAnchor(btnVoltar, 10.0);
         AnchorPane.setLeftAnchor(btnVoltar, 10.0);
         getChildren().add(btnVoltar);
 
-        btnEntrar = new Button("Entrar");
+        Button btnEntrar = new Button("Entrar");
         btnEntrar.setOnAction(this::clicarEntrarSala);
         AnchorPane.setTopAnchor(btnEntrar, 10.0);
         AnchorPane.setRightAnchor(btnEntrar, 10.0);
@@ -53,12 +50,11 @@ public class PainelProcurarSala extends AnchorPane {
         AnchorPane.setRightAnchor(tabelaSalas, 10.0);
         AnchorPane.setBottomAnchor(tabelaSalas, 10.0);
         getChildren().add(tabelaSalas);
-
-        listarSalas = new ListarSalas(new ObservadorCriarSalas());
     }
 
     public void atualizar() {
-        listarSalas.executar();
+        listarSalas = new ListarSalas(new ObservadorCriarSalas());
+        new Thread(listarSalas).start();
     }
 
     private void clicarVoltar(ActionEvent event) {
@@ -68,8 +64,7 @@ public class PainelProcurarSala extends AnchorPane {
     }
 
     private void clicarEntrarSala(ActionEvent event) {
-        entrarSala = new EntrarSala(new ObservadorEntrarSala(), getLoginSala());
-        entrarSala.executar();
+        new Thread(new EntrarSala(new ObservadorEntrarSala(), getLoginSala())).start();
         event.consume();
     }
 
@@ -90,21 +85,20 @@ public class PainelProcurarSala extends AnchorPane {
 
         @Override
         public void erro(String mensagem) {
-
+            form.exibirErro(mensagem);
         }
     }
 
     private class ObservadorEntrarSala implements Observador<Sala> {
         @Override
         public void sucesso(Sala sala) {
-            entrarSala.parar();
             form.setSala(sala);
             form.mudarParaPainelSala();
         }
 
         @Override
         public void erro(String mensagem) {
-
+            form.exibirErro(mensagem);
         }
     }
 }
