@@ -7,10 +7,12 @@ import org.json.JSONObject;
 public class EnviarResposta extends ComunicacaoBase<Boolean> {
 
     private final ParametrosTelas parametros;
+    private final int quantidadeErro;
 
-    public EnviarResposta(Observador<Boolean> observador, ParametrosTelas parametros) {
+    public EnviarResposta(Observador<Boolean> observador, ParametrosTelas parametros, int quantidadeErro) {
         super(observador);
         this.parametros = parametros;
+        this.quantidadeErro = quantidadeErro;
     }
 
     @Override
@@ -22,7 +24,8 @@ public class EnviarResposta extends ComunicacaoBase<Boolean> {
                         .put("nomeSala", parametros.getSala().getNome())
                         .put("usuarioID", parametros.getUsuario().getId())
                         .put("nomeUsuario", parametros.getUsuario().getNome())
-                        .put("pontuacaoUsuario", parametros.getUsuario().getPontuacao()))
+                        .put("pontuacaoUsuario", parametros.getUsuario().getPontuacao())
+                        .put("quantidadeErroUsuario", quantidadeErro))
                 .toString());
     }
 

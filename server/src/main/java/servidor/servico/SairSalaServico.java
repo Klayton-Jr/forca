@@ -14,9 +14,10 @@ import java.net.Socket;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EnviarRespostaServico extends Servico {
+public class SairSalaServico extends Servico {
 
-    public EnviarRespostaServico(Socket socket, DataOutputStream writer) {
+
+    public SairSalaServico(Socket socket, DataOutputStream writer) {
         super(socket, writer);
     }
 
@@ -26,30 +27,22 @@ public class EnviarRespostaServico extends Servico {
         Usuario usuarioRequisicao = FabricaObjetos.getUsuarioFromJSON(json);
 
         List<Sala> salas = CacheObjetos.getInstance().getSalas();
-        Sala sala = salas.get(salas.indexOf(salaRequisicao));
+
+        int index = salas.indexOf(salaRequisicao);
+
+        Sala sala = salas.get(index);
         List<Usuario> usuarios = sala.getUsuarios();
+        Usuario usuarioSaindo = usuarios.get(usuarios.indexOf(usuarioRequisicao));
 
-        Usuario usuarioAtual = usuarios.get(usuarios.indexOf(usuarioRequisicao));
-        usuarioAtual.setSituacao(SituacaoUsuario.AGUARDANDO);
-        usuarioAtual.setPontuacao(usuarioRequisicao.getPontuacao());
+        usuarios.remove(usuarioRequisicao);
+        sala.setNumeroAtualUsuario(usuarios.size());
 
-        for (Usuario usuario : usuarios) {
-            if (usuario.getId().equals(sala.getUsuarioVezID())) {
-                usuario.setPontuacao(usuario.getPontuacao() + getPontuacao(json.getInt("quantidadeErroUsuario"), usuarios.size()));
-                break;
-            }
-        }
-
-        if (usuarios.stream().filter(user -> SituacaoUsuario.JOGANDO == user.getSituacao()).collect(Collectors.toList()).size() == 0) {
+        if (usuarios.stream().filter(user -> SituacaoUsuario.JOGANDO == user.getSituacao()).collect(Collectors.toList()).size() == 0 && usuarioSaindo.getSituacao() == SituacaoUsuario.JOGANDO) {
             sala.setSituacaoJogo(SituacaoJogo.ESCOLHENDO_PALAVRA);
             sala.setUsuarioVezID(getNovoUsuarioVez(sala));
         }
 
         return enviar(new JSONObject().put("resultado", true));
-    }
-
-    private int getPontuacao(int quantidadeErrosUsuario, int quantidadeUsuarios) {
-        return quantidadeErrosUsuario * (100 / (quantidadeUsuarios * 6));
     }
 
     private String getNovoUsuarioVez(Sala sala) {

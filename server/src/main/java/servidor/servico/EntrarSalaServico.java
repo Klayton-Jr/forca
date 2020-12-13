@@ -27,13 +27,10 @@ public class EntrarSalaServico extends Servico {
 
         int index = salas.indexOf(salaRequisicao);
 
-        if (index == -1)
-            return enviar(new JSONObject().put("resultado", false).put("mensagem", "Não foi possível localizar a sala selecionada"));
+        Sala sala = salas.get(index);
+        sala.getUsuarios().add(usuarioRequisicao);
+        sala.setNumeroAtualUsuario(sala.getUsuarios().size());
 
-        Sala salaDesejada = salas.get(index);
-        salaDesejada.setNumeroAtualUsuario(salaDesejada.getNumeroAtualUsuario() + 1);
-        salaDesejada.getUsuarios().add(usuarioRequisicao);
-
-        return enviar(new JSONObject().put("resultado", true).put("sala", FabricaObjetos.getSalaJSON(salaDesejada)));
+        return enviar(new JSONObject().put("resultado", true).put("sala", FabricaObjetos.getSalaJSON(sala)));
     }
 }

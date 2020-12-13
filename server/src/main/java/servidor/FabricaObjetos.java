@@ -52,7 +52,8 @@ public class FabricaObjetos {
         return new JSONObject()
                 .put("id", usuario.getId())
                 .put("nome", usuario.getNome())
-                .put("pontuacao", usuario.getPontuacao());
+                .put("pontuacao", usuario.getPontuacao())
+                .put("situacao", usuario.getSituacao().toString());
     }
 
     public static Sala getSalaFromJSON(JSONObject json) {

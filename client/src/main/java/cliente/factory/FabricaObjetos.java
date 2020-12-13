@@ -34,6 +34,11 @@ public class FabricaObjetos {
     public static Usuario criarUsuarioDeJSON(JSONObject jsonObject) {
         Usuario usuario = new Usuario(jsonObject.getString("id"), jsonObject.getString("nome"));
         usuario.setPontuacao(jsonObject.optInt("pontuacao"));
+        String situacao = jsonObject.optString("situacao");
+
+        if (!"".equals(situacao))
+            usuario.setSituacao(SituacaoUsuario.valueOf(situacao));
+
         return usuario;
     }
 

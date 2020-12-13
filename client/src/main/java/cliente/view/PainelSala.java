@@ -1,14 +1,13 @@
 package cliente.view;
 
-import cliente.comunicacao.CarregarSala;
-import cliente.comunicacao.EnviarPalavra;
-import cliente.comunicacao.EnviarResposta;
-import cliente.comunicacao.IniciarJogo;
+import cliente.comunicacao.*;
 import cliente.model.*;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.text.Normalizer;
@@ -32,12 +31,19 @@ public class PainelSala extends AnchorPane {
     private String palavraAtualSemAcento;
     private List<String> tentativas;
     private int quantidadeErros;
+    private int quantidadeAcertosSequidos;
+    private CarregarSala carregarSala;
     private Image imageForca1;
     private Image imageForca2;
     private Image imageForca3;
     private Image imageForca4;
     private Image imageForca5;
     private Image imageForca6;
+    private Image imageForcaFalhou;
+    private Image imageAcerto1;
+    private Image imageAcerto2;
+    private Image imageAcerto3;
+    private Image imageAcerto4;
 
     public PainelSala(Formulario form) {
         this.form = form;
@@ -69,16 +75,7 @@ public class PainelSala extends AnchorPane {
         AnchorPane.setBottomAnchor(treeViewUsuarios, 0.0);
         getChildren().add(treeViewUsuarios);
 
-        imageAguardando = new Image(getClass().getResourceAsStream("/img/aguardando.png"));
-        imageAguardandoPalavra = new Image(getClass().getResourceAsStream("/img/aguardando_palavra.png"));
-        imageSuaVez = new Image(getClass().getResourceAsStream("/img/sua_vez.png"));
-        imageForca0 = new Image(getClass().getResourceAsStream("/img/forca0.png"));
-        imageForca1 = new Image(getClass().getResourceAsStream("/img/forca1.png"));
-        imageForca2 = new Image(getClass().getResourceAsStream("/img/forca2.png"));
-        imageForca3 = new Image(getClass().getResourceAsStream("/img/forca3.png"));
-        imageForca4 = new Image(getClass().getResourceAsStream("/img/forca4.png"));
-        imageForca5 = new Image(getClass().getResourceAsStream("/img/forca5.png"));
-        imageForca6 = new Image(getClass().getResourceAsStream("/img/forca6.png"));
+        carregarImagens();
 
         imageView = new ImageView(imageAguardando);
         AnchorPane.setTopAnchor(imageView, 50.0);
@@ -94,6 +91,7 @@ public class PainelSala extends AnchorPane {
 
         edtResposta = new TextField();
         edtResposta.setEditable(false);
+        edtResposta.setOnKeyPressed(this::eventoEnter);
         AnchorPane.setLeftAnchor(edtResposta, 160.0);
         AnchorPane.setRightAnchor(edtResposta, 65.0);
         AnchorPane.setBottomAnchor(edtResposta, 10.0);
@@ -107,12 +105,42 @@ public class PainelSala extends AnchorPane {
         getChildren().add(btnEnviar);
     }
 
+    private void carregarImagens() {
+        imageAguardando = new Image(getClass().getResourceAsStream("/img/aguardando.png"));
+        imageAguardandoPalavra = new Image(getClass().getResourceAsStream("/img/aguardando_palavra.png"));
+        imageSuaVez = new Image(getClass().getResourceAsStream("/img/sua_vez.png"));
+        imageForca0 = new Image(getClass().getResourceAsStream("/img/forca0.png"));
+        imageForca1 = new Image(getClass().getResourceAsStream("/img/forca1.png"));
+        imageForca2 = new Image(getClass().getResourceAsStream("/img/forca2.png"));
+        imageForca3 = new Image(getClass().getResourceAsStream("/img/forca3.png"));
+        imageForca4 = new Image(getClass().getResourceAsStream("/img/forca4.png"));
+        imageForca5 = new Image(getClass().getResourceAsStream("/img/forca5.png"));
+        imageForca6 = new Image(getClass().getResourceAsStream("/img/forca6.png"));
+        imageForcaFalhou = new Image(getClass().getResourceAsStream("/img/falhou.png"));
+        imageAcerto1 = new Image(getClass().getResourceAsStream("/img/acertou01.png"));
+        imageAcerto2 = new Image(getClass().getResourceAsStream("/img/acertou02.png"));
+        imageAcerto3 = new Image(getClass().getResourceAsStream("/img/acertou03.png"));
+        imageAcerto4 = new Image(getClass().getResourceAsStream("/img/acertou04.png"));
+    }
+
+    private void eventoEnter(KeyEvent event) {
+        if (KeyCode.ENTER == event.getCode()) {
+            event.consume();
+            enviar();
+        }
+    }
+
     private void clicarSair(ActionEvent e) {
+        new Thread(new SairSala(new ObservadorSairSala(), form.getParametrosTelas())).start();
         e.consume();
     }
 
     private void clicarEnviar(ActionEvent e) {
         e.consume();
+        enviar();
+    }
+
+    private void enviar() {
         ParametrosTelas parametros = form.getParametrosTelas();
         Sala sala = parametros.getSala();
         Usuario usuario = parametros.getUsuario();
@@ -135,7 +163,7 @@ public class PainelSala extends AnchorPane {
                     quantidadeErros++;
                     atualizarImagemForca();
                 }
-            } else {
+            } else if (resposta.length() > 1) {
                 if (palavraAtualSemAcento.equalsIgnoreCase(resposta)) {
                     enviarResposta();
                 } else {
@@ -151,10 +179,31 @@ public class PainelSala extends AnchorPane {
     }
 
     private void enviarResposta() {
+        edtResposta.setEditable(false);
+        btnIniciarJogo.setDisable(true);
+
+        if (quantidadeErros >= 6) {
+            imageView.setImage(imageForcaFalhou);
+            quantidadeAcertosSequidos = 0;
+            lblMensagem.setText("Que pena!!!");
+        } else {
+            atualizarImagemAcertos();
+            lblMensagem.setText("Acertou!!!");
+        }
+
         ParametrosTelas parametros = form.getParametrosTelas();
         parametros.getUsuario().setPontuacao(parametros.getUsuario().getPontuacao() + getPontuacaoRodada());
 
-        new Thread(new EnviarResposta(new ObservadorBasico(), parametros)).start();
+        new Thread(new EnviarResposta(new ObservadorBasico(), parametros, quantidadeErros)).start();
+    }
+
+    private void atualizarImagemAcertos() {
+        switch (quantidadeAcertosSequidos) {
+            case 0 -> imageView.setImage(imageAcerto1);
+            case 1 -> imageView.setImage(imageAcerto2);
+            case 2 -> imageView.setImage(imageAcerto3);
+            default -> imageView.setImage(imageAcerto4);
+        }
     }
 
     private int getPontuacaoRodada() {
@@ -204,13 +253,13 @@ public class PainelSala extends AnchorPane {
                 quantidadeErros = 0;
                 tentativas.clear();
             } else {
-                if (sala.getUsuarioVezID().equals(usuario.getId()) || SituacaoUsuario.JOGANDO == usuario.getSituacao()) {
+                if (sala.getUsuarioVezID().equals(usuario.getId())) {
                     lblMensagem.setText("Aguardando outros usuários responderem.");
                     imageView.setImage(imageAguardandoPalavra);
 
                     edtResposta.setEditable(false);
                     btnEnviar.setDisable(true);
-                } else {
+                } else if (SituacaoUsuario.JOGANDO == usuario.getSituacao()) {
                     atualizarPalavraAtual();
                     atualizarImagemForca();
                     edtResposta.setEditable(true);
@@ -258,7 +307,8 @@ public class PainelSala extends AnchorPane {
 
     public void iniciarServico() {
         atualizar();
-        new Thread(new CarregarSala(new ObservadorCarregarSala(), form.getParametrosTelas())).start();
+        carregarSala = new CarregarSala(new ObservadorCarregarSala(), form.getParametrosTelas());
+        new Thread(carregarSala).start();
     }
 
     private class ObservadorCarregarSala implements Observador<ParametrosTelas> {
@@ -280,6 +330,20 @@ public class PainelSala extends AnchorPane {
         @Override
         public void sucesso(Boolean resultado) {
 
+        }
+
+        @Override
+        public void erro(String mensagem) {
+            form.exibirErro(mensagem);
+        }
+    }
+
+    private class ObservadorSairSala implements Observador<Boolean> {
+
+        @Override
+        public void sucesso(Boolean aBoolean) {
+            carregarSala.parar();
+            form.mudarParaPainelMenu();
         }
 
         @Override
