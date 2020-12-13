@@ -3,6 +3,7 @@ package servidor.servico;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import servidor.CacheObjetos;
+import servidor.FabricaObjetos;
 import servidor.model.Sala;
 import servidor.model.Situacao;
 import servidor.model.Usuario;
@@ -44,10 +45,7 @@ public class CriarSalaServico extends Servico {
         cacheObjetos.getSalas().add(sala);
 
         return enviar(new JSONObject().put("resultado", true)
-                .put("sala", json.put("id", sala.getId())
-                    .put("numeroAtualUsuario", 1)
-                    .put("numeroAtualRodada", 0)
-                    .put("situacao", Situacao.EM_ESPERA.toString())));
+                .put("sala", FabricaObjetos.getSalaJSON(sala)));
     }
 
     private List<Usuario> getUsuarios(JSONArray jsonUsuarios) {

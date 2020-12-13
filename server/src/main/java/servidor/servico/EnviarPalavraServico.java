@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
-public class IniciarJogoServico extends Servico {
+public class EnviarPalavraServico extends Servico {
 
-    public IniciarJogoServico(Socket socket, DataOutputStream writer) {
+    public EnviarPalavraServico(Socket socket, DataOutputStream writer) {
         super(socket, writer);
     }
 
@@ -25,12 +25,9 @@ public class IniciarJogoServico extends Servico {
         List<Sala> salas = CacheObjetos.getInstance().getSalas();
         Sala sala = salas.get(salas.indexOf(salaRequisicao));
 
-        sala.setSituacao(Situacao.JOGANDO);
-        sala.setSituacaoJogo(SituacaoJogo.ESCOLHENDO_PALAVRA);
-        sala.setUsuarioVezID(sala.getUsuarioDonoID());
+        sala.setSituacaoJogo(SituacaoJogo.DESCOBRINDO_PALAVRA);
+        sala.setPalavraAtual(json.getString("palavraAtual"));
 
         return enviar(new JSONObject().put("resultado", true));
     }
-
-
 }

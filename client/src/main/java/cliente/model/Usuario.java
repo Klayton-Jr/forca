@@ -1,17 +1,21 @@
 package cliente.model;
 
-public final class Usuario {
+import java.util.Objects;
+import java.util.UUID;
+
+public class Usuario {
 
     private final String id;
     private final String nome;
+    private int pontuacao;
+
+    public Usuario(String nome) {
+        this(UUID.randomUUID().toString(), nome);
+    }
 
     public Usuario(String id, String nome) {
         this.id = id;
         this.nome = nome;
-    }
-
-    public Usuario(String nome) {
-        this(null, nome);
     }
 
     public String getId() {
@@ -22,8 +26,29 @@ public final class Usuario {
         return nome;
     }
 
+    public int getPontuacao() {
+        return pontuacao;
+    }
+
+    public void setPontuacao(int pontuacao) {
+        this.pontuacao = pontuacao;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(id, usuario.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
     @Override
     public String toString() {
-        return nome;
+        return nome + " - " + pontuacao + " pontos";
     }
 }

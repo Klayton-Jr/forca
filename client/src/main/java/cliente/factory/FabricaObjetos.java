@@ -1,9 +1,6 @@
 package cliente.factory;
 
-import cliente.model.ParametrosTelas;
-import cliente.model.Sala;
-import cliente.model.Situacao;
-import cliente.model.Usuario;
+import cliente.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,13 +10,16 @@ public class FabricaObjetos {
         Sala sala = new Sala();
         sala.setId(jsonObject.getString("id"));
         sala.setUsuarioDonoID(jsonObject.getString("usuarioDonoID"));
+        sala.setUsuarioVezID(jsonObject.optString("usuarioVezID"));
         sala.setNome(jsonObject.getString("nome"));
         sala.setNumeroMaximoUsuario(jsonObject.getInt("numeroMaximoUsuario"));
         sala.setNumeroAtualUsuario(jsonObject.getInt("numeroAtualUsuario"));
         sala.setNumeroTotalRodadas(jsonObject.getInt("numeroTotalRodadas"));
         sala.setNumeroAtualRodada(jsonObject.getInt("numeroAtualRodada"));
         sala.setTempoRespostaLetra(jsonObject.getInt("tempoRespostaLetra"));
+        sala.setPalavraAtual(jsonObject.optString("palavraAtual"));
         sala.setSituacao(Situacao.valueOf(jsonObject.getString("situacao")));
+        sala.setSituacaoJogo(SituacaoJogo.valueOf(jsonObject.getString("situacaoJogo")));
 
         JSONArray usuariosJSON = jsonObject.optJSONArray("usuarios");
 
@@ -32,7 +32,9 @@ public class FabricaObjetos {
     }
 
     public static Usuario criarUsuarioDeJSON(JSONObject jsonObject) {
-        return new Usuario(jsonObject.getString("id"), jsonObject.getString("nome"));
+        Usuario usuario = new Usuario(jsonObject.getString("id"), jsonObject.getString("nome"));
+        usuario.setPontuacao(jsonObject.optInt("pontuacao"));
+        return usuario;
     }
 
     public static ParametrosTelas criarParametrosDeJSON(JSONObject json) {

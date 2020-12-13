@@ -2,7 +2,7 @@ package servidor.servico;
 
 import org.json.JSONObject;
 import servidor.CacheObjetos;
-import servidor.FabricaJSON;
+import servidor.FabricaObjetos;
 import servidor.model.Sala;
 import servidor.model.Usuario;
 
@@ -20,24 +20,20 @@ public class EntrarSalaServico extends Servico {
 
     @Override
     public boolean executar(JSONObject json) throws IOException {
-
-        Sala sala = new Sala();
-        sala.setId(json.getString("salaID"));
-        sala.setNome(json.getString("nomeSala"));
-
-        Usuario usuario = new Usuario(json.getString("usuarioID"), json.getString("nomeUsuario"));
+        Sala salaRequisicao = FabricaObjetos.getSalaFromJSON(json);
+        Usuario usuarioRequisicao = FabricaObjetos.getUsuarioFromJSON(json);
 
         List<Sala> salas = CacheObjetos.getInstance().getSalas();
 
-        int index = salas.indexOf(sala);
+        int index = salas.indexOf(salaRequisicao);
 
         if (index == -1)
             return enviar(new JSONObject().put("resultado", false).put("mensagem", "Não foi possível localizar a sala selecionada"));
 
         Sala salaDesejada = salas.get(index);
         salaDesejada.setNumeroAtualUsuario(salaDesejada.getNumeroAtualUsuario() + 1);
-        salaDesejada.getUsuarios().add(usuario);
+        salaDesejada.getUsuarios().add(usuarioRequisicao);
 
-        return enviar(new JSONObject().put("resultado", true).put("sala", FabricaJSON.getSala(salaDesejada)));
+        return enviar(new JSONObject().put("resultado", true).put("sala", FabricaObjetos.getSalaJSON(salaDesejada)));
     }
 }

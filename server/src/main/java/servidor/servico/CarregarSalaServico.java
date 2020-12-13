@@ -2,7 +2,7 @@ package servidor.servico;
 
 import org.json.JSONObject;
 import servidor.CacheObjetos;
-import servidor.FabricaJSON;
+import servidor.FabricaObjetos;
 import servidor.model.Sala;
 import servidor.model.Usuario;
 
@@ -19,17 +19,13 @@ public class CarregarSalaServico extends Servico {
 
     @Override
     public boolean executar(JSONObject json) throws IOException {
-
-        Usuario usuario = new Usuario(json.getString("usuarioID"), json.getString("nomeUsuario"));
-
-        Sala sala = new Sala();
-        sala.setId(json.getString("salaID"));
-        sala.setNome(json.getString("nomeSala"));
+        Sala salaRequisicao = FabricaObjetos.getSalaFromJSON(json);
+        Usuario usuarioRequisicao = FabricaObjetos.getUsuarioFromJSON(json);
 
         while (isConnected()) {
             enviar(new JSONObject()
                     .put("resultado", true)
-                    .put("parametros", getParametros(sala, usuario)));
+                    .put("parametros", getParametros(salaRequisicao, usuarioRequisicao)));
             sleep(2000);
         }
 
@@ -44,8 +40,8 @@ public class CarregarSalaServico extends Servico {
         Usuario usuario = sala.getUsuarios().get(sala.getUsuarios().indexOf(usuarioRequisicao));
 
         return new JSONObject()
-                .put("usuario", FabricaJSON.getUsuario(usuario))
-                .put("sala", FabricaJSON.getSala(sala));
+                .put("usuario", FabricaObjetos.getUsuarioJSON(usuario))
+                .put("sala", FabricaObjetos.getSalaJSON(sala));
     }
 
 }

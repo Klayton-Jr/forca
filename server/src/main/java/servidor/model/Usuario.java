@@ -6,6 +6,7 @@ public class Usuario {
 
     private final String id;
     private final String nome;
+    private int pontuacao;
 
     public Usuario(String id, String nome) {
         this.id = id;
@@ -18,6 +19,14 @@ public class Usuario {
 
     public String getNome() {
         return nome;
+    }
+
+    public int getPontuacao() {
+        return pontuacao;
+    }
+
+    public void setPontuacao(int pontuacao) {
+        this.pontuacao = pontuacao;
     }
 
     @Override

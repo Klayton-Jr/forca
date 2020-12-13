@@ -2,6 +2,7 @@ package servidor.servico;
 
 import org.json.JSONObject;
 import servidor.CacheObjetos;
+import servidor.FabricaObjetos;
 import servidor.model.Usuario;
 
 import java.io.DataOutputStream;
@@ -41,7 +42,6 @@ public class ValidaUsuarioServico extends Servico {
         usuarios.add(usuarioLogin);
 
         return enviar(new JSONObject().put("resultado", true)
-                .put("usuario", new JSONObject().put("id", usuarioLogin.getId())
-                        .put("nome", usuarioLogin.getNome())));
+                .put("usuario", FabricaObjetos.getUsuarioJSON(usuarioLogin)));
     }
 }

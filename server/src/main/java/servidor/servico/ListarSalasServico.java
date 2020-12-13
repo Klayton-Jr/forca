@@ -3,7 +3,7 @@ package servidor.servico;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import servidor.CacheObjetos;
-import servidor.FabricaJSON;
+import servidor.FabricaObjetos;
 import servidor.model.Sala;
 import servidor.model.Situacao;
 
@@ -33,7 +33,7 @@ public class ListarSalasServico extends Servico {
 
     private JSONArray getSalas() {
         List<Sala> salas = CacheObjetos.getInstance().getSalas().stream().filter(sala -> Situacao.EM_ESPERA == sala.getSituacao()).collect(Collectors.toList());
-        return FabricaJSON.getSalas(salas);
+        return FabricaObjetos.getSalasJSON(salas);
     }
 
 }

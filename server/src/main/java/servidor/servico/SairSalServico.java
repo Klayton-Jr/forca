@@ -4,33 +4,27 @@ import org.json.JSONObject;
 import servidor.CacheObjetos;
 import servidor.FabricaObjetos;
 import servidor.model.Sala;
-import servidor.model.Situacao;
-import servidor.model.SituacaoJogo;
+import servidor.model.Usuario;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
-public class IniciarJogoServico extends Servico {
+public class SairSalServico extends Servico {
 
-    public IniciarJogoServico(Socket socket, DataOutputStream writer) {
+    public SairSalServico(Socket socket, DataOutputStream writer) {
         super(socket, writer);
     }
 
     @Override
     public boolean executar(JSONObject json) throws IOException {
         Sala salaRequisicao = FabricaObjetos.getSalaFromJSON(json);
+        Usuario usuarioRequisicao = FabricaObjetos.getUsuarioFromJSON(json);
 
         List<Sala> salas = CacheObjetos.getInstance().getSalas();
         Sala sala = salas.get(salas.indexOf(salaRequisicao));
 
-        sala.setSituacao(Situacao.JOGANDO);
-        sala.setSituacaoJogo(SituacaoJogo.ESCOLHENDO_PALAVRA);
-        sala.setUsuarioVezID(sala.getUsuarioDonoID());
-
-        return enviar(new JSONObject().put("resultado", true));
+        return false;
     }
-
-
 }

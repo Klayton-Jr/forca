@@ -8,14 +8,23 @@ public class Sala {
 
     private String id;
     private String usuarioDonoID;
+    private String usuarioVezID;
     private String nome;
     private int numeroMaximoUsuario;
     private int numeroAtualUsuario;
     private int numeroTotalRodadas;
     private int numeroAtualRodada;
     private int tempoRespostaLetra;
+    private String palavraAtual;
+    private SituacaoJogo situacaoJogo;
     private Situacao situacao;
-    private final List<Usuario> usuarios = new ArrayList<>();
+    private final List<Usuario> usuarios;
+
+    public Sala() {
+        situacao = Situacao.EM_ESPERA;
+        situacaoJogo = SituacaoJogo.ESCOLHENDO_PALAVRA;
+        usuarios = new ArrayList<>();
+    }
 
     public String getId() {
         return id;
@@ -31,6 +40,14 @@ public class Sala {
 
     public void setUsuarioDonoID(String usuarioDonoID) {
         this.usuarioDonoID = usuarioDonoID;
+    }
+
+    public String getUsuarioVezID() {
+        return usuarioVezID;
+    }
+
+    public void setUsuarioVezID(String usuarioVezID) {
+        this.usuarioVezID = usuarioVezID;
     }
 
     public String getNome() {
@@ -80,6 +97,23 @@ public class Sala {
     public void setTempoRespostaLetra(int tempoRespostaLetra) {
         this.tempoRespostaLetra = tempoRespostaLetra;
     }
+
+    public String getPalavraAtual() {
+        return palavraAtual;
+    }
+
+    public void setPalavraAtual(String palavraAtual) {
+        this.palavraAtual = palavraAtual;
+    }
+
+    public SituacaoJogo getSituacaoJogo() {
+        return situacaoJogo;
+    }
+
+    public void setSituacaoJogo(SituacaoJogo situacaoJogo) {
+        this.situacaoJogo = situacaoJogo;
+    }
+
 
     public Situacao getSituacao() {
         return situacao;
