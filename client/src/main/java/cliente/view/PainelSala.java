@@ -23,16 +23,16 @@ public class PainelSala extends AnchorPane {
     private TextField edtResposta;
     private Button btnEnviar;
     private ImageView imageView;
-    private Image imageAguardando;
-    private Image imageSuaVez;
-    private Image imageAguardandoPalavra;
-    private Image imageForca0;
     private String palavraAtual;
     private String palavraAtualSemAcento;
     private List<String> tentativas;
     private int quantidadeErros;
     private int quantidadeAcertosSequidos;
     private CarregarSala carregarSala;
+    private Image imageAguardando;
+    private Image imageSuaVez;
+    private Image imageAguardandoPalavra;
+    private Image imageForca0;
     private Image imageForca1;
     private Image imageForca2;
     private Image imageForca3;
@@ -44,6 +44,11 @@ public class PainelSala extends AnchorPane {
     private Image imageAcerto2;
     private Image imageAcerto3;
     private Image imageAcerto4;
+    private Image image1Lugar;
+    private Image image2Lugar;
+    private Image image3Lugar;
+    private Image image4Lugar;
+    private Label lblNumeroRodadas;
 
     public PainelSala(Formulario form) {
         this.form = form;
@@ -89,6 +94,13 @@ public class PainelSala extends AnchorPane {
         AnchorPane.setBottomAnchor(lblMensagem, 67.0);
         getChildren().add(lblMensagem);
 
+        lblNumeroRodadas = new Label();
+        lblNumeroRodadas.setStyle("-fx-alignment: center; -fx-text-fill: darkgreen; -fx-font-size: 1em;");
+        AnchorPane.setLeftAnchor(lblNumeroRodadas, 165.0);
+        AnchorPane.setRightAnchor(lblNumeroRodadas, 15.0);
+        AnchorPane.setBottomAnchor(lblNumeroRodadas, 40.0);
+        getChildren().add(lblNumeroRodadas);
+
         edtResposta = new TextField();
         edtResposta.setEditable(false);
         edtResposta.setOnKeyPressed(this::eventoEnter);
@@ -121,6 +133,10 @@ public class PainelSala extends AnchorPane {
         imageAcerto2 = new Image(getClass().getResourceAsStream("/img/acertou02.png"));
         imageAcerto3 = new Image(getClass().getResourceAsStream("/img/acertou03.png"));
         imageAcerto4 = new Image(getClass().getResourceAsStream("/img/acertou04.png"));
+        image1Lugar = new Image(getClass().getResourceAsStream("/img/1lugar.png"));
+        image2Lugar = new Image(getClass().getResourceAsStream("/img/2lugar.png"));
+        image3Lugar = new Image(getClass().getResourceAsStream("/img/3lugar.png"));
+        image4Lugar = new Image(getClass().getResourceAsStream("/img/4lugar.png"));
     }
 
     private void eventoEnter(KeyEvent event) {
@@ -180,7 +196,7 @@ public class PainelSala extends AnchorPane {
 
     private void enviarResposta() {
         edtResposta.setEditable(false);
-        btnIniciarJogo.setDisable(true);
+        btnEnviar.setDisable(true);
 
         if (quantidadeErros >= 6) {
             imageView.setImage(imageForcaFalhou);
@@ -223,7 +239,9 @@ public class PainelSala extends AnchorPane {
         palavraAtual = sala.getPalavraAtual();
         palavraAtualSemAcento = normalizaTexto(palavraAtual);
 
-        if (!sala.getUsuarioDonoID().equals(usuario.getId()) || Situacao.EM_ESPERA != sala.getSituacao())
+        if (sala.getUsuarioDonoID().equals(usuario.getId()))
+            btnIniciarJogo.setVisible(Situacao.JOGANDO != sala.getSituacao());
+        else
             btnIniciarJogo.setVisible(false);
 
         noRaiz.getChildren().clear();
@@ -266,9 +284,24 @@ public class PainelSala extends AnchorPane {
                     btnEnviar.setDisable(false);
                 }
             }
+            lblNumeroRodadas.setText("Rodada: " + sala.getNumeroAtualRodada() + " / " + sala.getNumeroTotalRodadas());
+        } else if (Situacao.FINALIZADA == sala.getSituacao()) {
+            lblMensagem.setText("Jogo Encerrado.");
+            lblNumeroRodadas.setText("");
+            atualizarImagemResultado(usuarioOrdenado.indexOf(usuario));
+            edtResposta.setEditable(false);
+            btnEnviar.setDisable(true);
         }
     }
 
+    private void atualizarImagemResultado(int posicao) {
+        switch (posicao) {
+            case 0 -> imageView.setImage(image1Lugar);
+            case 1 -> imageView.setImage(image2Lugar);
+            case 2 -> imageView.setImage(image3Lugar);
+            default -> imageView.setImage(image4Lugar);
+        }
+    }
 
     private void atualizarImagemForca() {
         switch (quantidadeErros) {

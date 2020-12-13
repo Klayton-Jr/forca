@@ -23,9 +23,18 @@ public class IniciarJogoServico extends Servico {
         List<Sala> salas = CacheObjetos.getInstance().getSalas();
         Sala sala = salas.get(salas.indexOf(salaRequisicao));
 
+        if (sala.getNumeroAtualUsuario() <= 1)
+            return enviar(new JSONObject().put("resultado", false).put("mensagem", "Número minimo de jogadores é 2."));
+
         sala.setSituacao(Situacao.JOGANDO);
         sala.setSituacaoJogo(SituacaoJogo.ESCOLHENDO_PALAVRA);
         sala.setUsuarioVezID(sala.getUsuarioDonoID());
+        sala.setNumeroAtualRodada(1);
+
+        for (Usuario usuario : sala.getUsuarios()) {
+            usuario.setPontuacao(0);
+            usuario.setSituacao(SituacaoUsuario.AGUARDANDO);
+        }
 
         return enviar(new JSONObject().put("resultado", true));
     }

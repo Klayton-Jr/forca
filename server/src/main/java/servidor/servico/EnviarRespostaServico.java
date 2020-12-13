@@ -3,10 +3,7 @@ package servidor.servico;
 import org.json.JSONObject;
 import servidor.CacheObjetos;
 import servidor.FabricaObjetos;
-import servidor.model.Sala;
-import servidor.model.SituacaoJogo;
-import servidor.model.SituacaoUsuario;
-import servidor.model.Usuario;
+import servidor.model.*;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -42,14 +39,24 @@ public class EnviarRespostaServico extends Servico {
 
         if (usuarios.stream().filter(user -> SituacaoUsuario.JOGANDO == user.getSituacao()).collect(Collectors.toList()).size() == 0) {
             sala.setSituacaoJogo(SituacaoJogo.ESCOLHENDO_PALAVRA);
-            sala.setUsuarioVezID(getNovoUsuarioVez(sala));
+                sala.setUsuarioVezID(getNovoUsuarioVez(sala));
+
+            if (sala.getNumeroAtualRodada() >= sala.getNumeroTotalRodadas()) {
+                sala.setSituacao(Situacao.FINALIZADA);
+                sala.setNumeroAtualRodada(0);
+            } else {
+                sala.setUsuarioVezID(getNovoUsuarioVez(sala));
+                sala.setNumeroAtualRodada(sala.getNumeroAtualRodada() + 1);
+                sala.setSituacao(sala.getNumeroAtualRodada() >= sala.getNumeroTotalRodadas() ? Situacao.JOGANDO : Situacao.FINALIZADA);
+            }
         }
+
 
         return enviar(new JSONObject().put("resultado", true));
     }
 
     private int getPontuacao(int quantidadeErrosUsuario, int quantidadeUsuarios) {
-        return quantidadeErrosUsuario * (100 / (quantidadeUsuarios * 6));
+        return quantidadeErrosUsuario * (100 / ((quantidadeUsuarios - 1) * 6));
     }
 
     private String getNovoUsuarioVez(Sala sala) {
