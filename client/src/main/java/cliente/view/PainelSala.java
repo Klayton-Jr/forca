@@ -221,6 +221,7 @@ public class PainelSala extends AnchorPane {
             lblMensagem.setText("Que pena!!!");
         } else {
             atualizarImagemAcertos();
+            quantidadeAcertosSequidos++;
             lblMensagem.setText("Acertou!!!");
         }
 
