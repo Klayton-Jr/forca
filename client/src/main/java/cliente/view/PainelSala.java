@@ -49,6 +49,8 @@ public class PainelSala extends AnchorPane {
     private Image image3Lugar;
     private Image image4Lugar;
     private Label lblNumeroRodadas;
+    private Label lblNomeSala;
+    private Label lblNomeUsuario;
 
     public PainelSala(Formulario form) {
         this.form = form;
@@ -68,6 +70,20 @@ public class PainelSala extends AnchorPane {
         AnchorPane.setTopAnchor(btnIniciarJogo, 10.0);
         AnchorPane.setRightAnchor(btnIniciarJogo, 10.0);
         getChildren().add(btnIniciarJogo);
+
+        lblNomeSala = new Label();
+        lblNomeSala.setStyle("-fx-alignment: center; -fx-text-fill: blue; -fx-font-size: 1.5em;");
+        AnchorPane.setLeftAnchor(lblNomeSala, 60.0);
+        AnchorPane.setRightAnchor(lblNomeSala, 60.0);
+        AnchorPane.setTopAnchor(lblNomeSala, 4.0);
+        getChildren().add(lblNomeSala);
+
+        lblNomeUsuario = new Label();
+        lblNomeUsuario.setStyle("-fx-alignment: center; -fx-text-fill: blue; -fx-font-size: 1em;");
+        AnchorPane.setLeftAnchor(lblNomeUsuario, 60.0);
+        AnchorPane.setRightAnchor(lblNomeUsuario, 60.0);
+        AnchorPane.setTopAnchor(lblNomeUsuario, 28.0);
+        getChildren().add(lblNomeUsuario);
 
         noRaiz = new TreeItem<>();
 
@@ -164,9 +180,10 @@ public class PainelSala extends AnchorPane {
         final String resposta = edtResposta.getText().trim();
 
         if (SituacaoJogo.ESCOLHENDO_PALAVRA == sala.getSituacaoJogo()) {
-            if (sala.getUsuarioVezID().equals(usuario.getId())) {
+            if (resposta.length() < 4)
+                form.exibirErro("Tamanho minimo da palavra é 4.");
+            else if (sala.getUsuarioVezID().equals(usuario.getId()))
                 new Thread(new EnviarPalavra(new ObservadorBasico(), form.getParametrosTelas(), resposta)).start();
-            }
         } else {
             if (resposta.length() == 1) {
                 String caractere = normalizaTexto(resposta);
@@ -339,7 +356,11 @@ public class PainelSala extends AnchorPane {
     }
 
     public void iniciarServico() {
+        lblNomeSala.setText(form.getSala().getNome());
+        lblNomeUsuario.setText(form.getUsuario().getNome());
+
         atualizar();
+
         carregarSala = new CarregarSala(new ObservadorCarregarSala(), form.getParametrosTelas());
         new Thread(carregarSala).start();
     }
