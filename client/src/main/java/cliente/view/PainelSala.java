@@ -10,8 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-import java.util.Comparator;
-import java.util.List;
+import java.text.Normalizer;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PainelSala extends AnchorPane {
@@ -26,11 +26,21 @@ public class PainelSala extends AnchorPane {
     private Image imageAguardando;
     private Image imageSuaVez;
     private Image imageAguardandoPalavra;
-    private String palavraAtual;
     private Image imageForca0;
+    private String palavraAtual;
+    private String palavraAtualSemAcento;
+    private List<String> tentativas;
+    private int quantidadeErros;
+    private Image imageForca1;
+    private Image imageForca2;
+    private Image imageForca3;
+    private Image imageForca4;
+    private Image imageForca5;
+    private Image imageForca6;
 
     public PainelSala(Formulario form) {
         this.form = form;
+        this.tentativas = new ArrayList<>();
         incializar();
     }
 
@@ -62,6 +72,12 @@ public class PainelSala extends AnchorPane {
         imageAguardandoPalavra = new Image(getClass().getResourceAsStream("/img/aguardando_palavra.png"));
         imageSuaVez = new Image(getClass().getResourceAsStream("/img/sua_vez.png"));
         imageForca0 = new Image(getClass().getResourceAsStream("/img/forca0.png"));
+        imageForca1 = new Image(getClass().getResourceAsStream("/img/forca1.png"));
+        imageForca2 = new Image(getClass().getResourceAsStream("/img/forca2.png"));
+        imageForca3 = new Image(getClass().getResourceAsStream("/img/forca3.png"));
+        imageForca4 = new Image(getClass().getResourceAsStream("/img/forca4.png"));
+        imageForca5 = new Image(getClass().getResourceAsStream("/img/forca5.png"));
+        imageForca6 = new Image(getClass().getResourceAsStream("/img/forca6.png"));
 
         imageView = new ImageView(imageAguardando);
         AnchorPane.setTopAnchor(imageView, 50.0);
@@ -100,13 +116,41 @@ public class PainelSala extends AnchorPane {
         Sala sala = parametros.getSala();
         Usuario usuario = parametros.getUsuario();
 
-        final String resposta = edtResposta.getText();
+        final String resposta = edtResposta.getText().trim();
 
         if (SituacaoJogo.ESCOLHENDO_PALAVRA == sala.getSituacaoJogo()) {
             if (sala.getUsuarioVezID().equals(usuario.getId())) {
                 new Thread(new EnviarPalavraVez(new ObservadorBasico(), form.getParametrosTelas(), resposta)).start();
             }
+        } else {
+            if (resposta.length() == 1) {
+                String caractere = normalizaTexto(resposta);
+                if (palavraAtualSemAcento.contains(caractere)) {
+                    if (!tentativas.contains(caractere)) {
+                        tentativas.add(caractere);
+                        atualizarPalavraAtual();
+                    }
+                } else {
+                    quantidadeErros++;
+                    atualizarImagemForca();
+                }
+            } else {
+                if (palavraAtualSemAcento.equalsIgnoreCase(resposta)) {
+                    enviarResposta();
+                } else {
+                    quantidadeErros++;
+                    atualizarImagemForca();
+                }
+            }
+
+            if (quantidadeErros == 6)
+                enviarResposta();
         }
+        edtResposta.clear();
+    }
+
+    private void enviarResposta() {
+
     }
 
     private void inicarJogo(ActionEvent e) {
@@ -120,6 +164,7 @@ public class PainelSala extends AnchorPane {
         Usuario usuario = parametros.getUsuario();
 
         palavraAtual = sala.getPalavraAtual();
+        palavraAtualSemAcento = normalizaTexto(palavraAtual);
 
         if (!sala.getUsuarioDonoID().equals(usuario.getId()) || Situacao.EM_ESPERA != sala.getSituacao())
             btnIniciarJogo.setVisible(false);
@@ -147,6 +192,9 @@ public class PainelSala extends AnchorPane {
                     edtResposta.setEditable(true);
                     btnEnviar.setDisable(false);
                 }
+
+                quantidadeErros = 0;
+                tentativas.clear();
             } else {
                 if (sala.getUsuarioVezID().equals(usuario.getId())) {
                     lblMensagem.setText("Aguardando outros usuários responderem.");
@@ -155,14 +203,50 @@ public class PainelSala extends AnchorPane {
                     edtResposta.setEditable(false);
                     btnEnviar.setDisable(true);
                 } else {
-                    lblMensagem.setText("Palavra: " + "_ ".repeat(sala.getPalavraAtual().length()));
-                    imageView.setImage(imageForca0);
+
+                    atualizarPalavraAtual();
 
                     edtResposta.setEditable(true);
                     btnEnviar.setDisable(false);
                 }
             }
         }
+    }
+
+
+    private void atualizarImagemForca() {
+        switch (quantidadeErros) {
+            case 0 -> imageView.setImage(imageForca0);
+            case 1 -> imageView.setImage(imageForca1);
+            case 2 -> imageView.setImage(imageForca2);
+            case 3 -> imageView.setImage(imageForca3);
+            case 4 -> imageView.setImage(imageForca4);
+            case 5 -> imageView.setImage(imageForca5);
+            default -> imageView.setImage(imageForca6);
+        }
+    }
+
+    private void atualizarPalavraAtual() {
+        StringBuilder builder = new StringBuilder();
+
+        for (char caractere : palavraAtual.toCharArray()) {
+            String caractereSTR = normalizaTexto(String.valueOf(caractere));
+
+            if (tentativas.contains(caractereSTR))
+                builder.append(caractere);
+            else if (" ".equalsIgnoreCase(caractereSTR)) {
+                builder.append(" ");
+            } else {
+                builder.append("_");
+            }
+            builder.append(" ");
+        }
+
+        lblMensagem.setText("Palavra: " + builder.toString());
+    }
+
+    public static String normalizaTexto(String str) {
+        return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase(Locale.ROOT);
     }
 
     public void iniciarServico() {
