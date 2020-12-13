@@ -1,23 +1,30 @@
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\componente\ReflectionObservadorAlteracaoCelula.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\PainelMenu.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\comunicacao\ListarSalas.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\componente\Dialogo.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\componente\ColumnGrid.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\comunicacao\EntrarSala.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\componente\Tabela.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\componente\EditCellReflection.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\PainelProcurarSala.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\model\Usuario.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\comunicacao\Conexao.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\model\Observador.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\model\Sala.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\PainelNovaSala.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\PainelSala.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\comunicacao\ValidarUsuario.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\factory\FabricaObjetos.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\componente\IntTextField.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\comunicacao\CriarSala.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\comunicacao\ComunicacaoBase.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\Formulario.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\model\LoginSala.java
-C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca\client\src\main\java\br\com\view\componente\ObservadorAlteracaoCelula.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\comunicacao\CarregarSala.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\comunicacao\IniciarJogo.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\componente\ObservadorAlteracaoCelula.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\componente\Tabela.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\comunicacao\ComunicacaoBase.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\comunicacao\ValidarUsuario.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\model\ParametrosTelas.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\componente\IntTextField.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\componente\ReflectionObservadorAlteracaoCelula.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\PainelNovaSala.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\comunicacao\EnviarPalavra.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\model\Situacao.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\model\Sala.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\model\SituacaoUsuario.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\model\SituacaoJogo.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\componente\EditCellReflection.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\comunicacao\CriarSala.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\comunicacao\EntrarSala.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\componente\ColumnGrid.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\PainelSala.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\comunicacao\EnviarResposta.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\model\Usuario.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\Formulario.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\comunicacao\SairSala.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\model\Observador.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\componente\Dialogo.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\PainelMenu.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\comunicacao\ListarSalas.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\view\PainelProcurarSala.java
+C:\Users\klayt\Faculdade\Sistemas Distribuidos 1\Trabalho final\forca 2.0\forca\client\src\main\java\cliente\factory\FabricaObjetos.java
