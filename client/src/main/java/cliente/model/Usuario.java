@@ -8,6 +8,7 @@ public class Usuario {
     private final String id;
     private final String nome;
     private int pontuacao;
+    private SituacaoUsuario situacao;
 
     public Usuario(String nome) {
         this(UUID.randomUUID().toString(), nome);
@@ -16,6 +17,7 @@ public class Usuario {
     public Usuario(String id, String nome) {
         this.id = id;
         this.nome = nome;
+        this.situacao = SituacaoUsuario.AGUARDANDO;
     }
 
     public String getId() {
@@ -32,6 +34,14 @@ public class Usuario {
 
     public void setPontuacao(int pontuacao) {
         this.pontuacao = pontuacao;
+    }
+
+    public SituacaoUsuario getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(SituacaoUsuario situacao) {
+        this.situacao = situacao;
     }
 
     @Override

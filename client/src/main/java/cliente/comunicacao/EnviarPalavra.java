@@ -4,12 +4,12 @@ import cliente.model.Observador;
 import cliente.model.ParametrosTelas;
 import org.json.JSONObject;
 
-public class EnviarPalavraVez extends ComunicacaoBase<Boolean> {
+public class EnviarPalavra extends ComunicacaoBase<Boolean> {
 
     private final ParametrosTelas parametros;
     private final String palavraAtual;
 
-    public EnviarPalavraVez(Observador<Boolean> observador, ParametrosTelas parametros, String palavraAtual) {
+    public EnviarPalavra(Observador<Boolean> observador, ParametrosTelas parametros, String palavraAtual) {
         super(observador);
         this.parametros = parametros;
         this.palavraAtual = palavraAtual;

@@ -3,9 +3,7 @@ package servidor.servico;
 import org.json.JSONObject;
 import servidor.CacheObjetos;
 import servidor.FabricaObjetos;
-import servidor.model.Sala;
-import servidor.model.Situacao;
-import servidor.model.SituacaoJogo;
+import servidor.model.*;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

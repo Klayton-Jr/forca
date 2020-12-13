@@ -1,7 +1,8 @@
 package cliente.view;
 
 import cliente.comunicacao.CarregarSala;
-import cliente.comunicacao.EnviarPalavraVez;
+import cliente.comunicacao.EnviarPalavra;
+import cliente.comunicacao.EnviarResposta;
 import cliente.comunicacao.IniciarJogo;
 import cliente.model.*;
 import javafx.event.ActionEvent;
@@ -120,7 +121,7 @@ public class PainelSala extends AnchorPane {
 
         if (SituacaoJogo.ESCOLHENDO_PALAVRA == sala.getSituacaoJogo()) {
             if (sala.getUsuarioVezID().equals(usuario.getId())) {
-                new Thread(new EnviarPalavraVez(new ObservadorBasico(), form.getParametrosTelas(), resposta)).start();
+                new Thread(new EnviarPalavra(new ObservadorBasico(), form.getParametrosTelas(), resposta)).start();
             }
         } else {
             if (resposta.length() == 1) {
@@ -150,7 +151,14 @@ public class PainelSala extends AnchorPane {
     }
 
     private void enviarResposta() {
+        ParametrosTelas parametros = form.getParametrosTelas();
+        parametros.getUsuario().setPontuacao(parametros.getUsuario().getPontuacao() + getPontuacaoRodada());
 
+        new Thread(new EnviarResposta(new ObservadorBasico(), parametros)).start();
+    }
+
+    private int getPontuacaoRodada() {
+        return quantidadeErros == 6 ? 0 : 100 - (quantidadeErros * 15);
     }
 
     private void inicarJogo(ActionEvent e) {
@@ -196,16 +204,15 @@ public class PainelSala extends AnchorPane {
                 quantidadeErros = 0;
                 tentativas.clear();
             } else {
-                if (sala.getUsuarioVezID().equals(usuario.getId())) {
+                if (sala.getUsuarioVezID().equals(usuario.getId()) || SituacaoUsuario.JOGANDO == usuario.getSituacao()) {
                     lblMensagem.setText("Aguardando outros usuários responderem.");
                     imageView.setImage(imageAguardandoPalavra);
 
                     edtResposta.setEditable(false);
                     btnEnviar.setDisable(true);
                 } else {
-
                     atualizarPalavraAtual();
-
+                    atualizarImagemForca();
                     edtResposta.setEditable(true);
                     btnEnviar.setDisable(false);
                 }

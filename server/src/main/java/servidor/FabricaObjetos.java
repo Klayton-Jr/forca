@@ -63,6 +63,8 @@ public class FabricaObjetos {
     }
 
     public static Usuario getUsuarioFromJSON(JSONObject json) {
-        return new Usuario(json.getString("usuarioID"), json.getString("nomeUsuario"));
+        Usuario usuario = new Usuario(json.getString("usuarioID"), json.getString("nomeUsuario"));
+        usuario.setPontuacao(json.optInt("pontuacaoUsuario", 0));
+        return usuario;
     }
 }

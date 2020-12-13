@@ -41,6 +41,8 @@ public class Cliente implements Runnable {
                 servico = new IniciarJogoServico(socket, writer);
             else if ("EnviarPalavra".equalsIgnoreCase(requisicao))
                 servico = new EnviarPalavraServico(socket, writer);
+            else if ("EnviarResposta".equalsIgnoreCase(requisicao))
+                servico = new EnviarRespostaServico(socket, writer);
 
             if (servico != null)
                 servico.executar(json.getJSONObject("dados"));
