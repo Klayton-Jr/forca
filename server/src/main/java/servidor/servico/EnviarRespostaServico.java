@@ -39,15 +39,13 @@ public class EnviarRespostaServico extends Servico {
 
         if (usuarios.stream().filter(user -> SituacaoUsuario.JOGANDO == user.getSituacao()).collect(Collectors.toList()).size() == 0) {
             sala.setSituacaoJogo(SituacaoJogo.ESCOLHENDO_PALAVRA);
-                sala.setUsuarioVezID(getNovoUsuarioVez(sala));
+            sala.setUsuarioVezID(getNovoUsuarioVez(sala));
 
             if (sala.getNumeroAtualRodada() >= sala.getNumeroTotalRodadas()) {
                 sala.setSituacao(Situacao.FINALIZADA);
                 sala.setNumeroAtualRodada(0);
             } else {
-                sala.setUsuarioVezID(getNovoUsuarioVez(sala));
                 sala.setNumeroAtualRodada(sala.getNumeroAtualRodada() + 1);
-                sala.setSituacao(sala.getNumeroAtualRodada() >= sala.getNumeroTotalRodadas() ? Situacao.JOGANDO : Situacao.FINALIZADA);
             }
         }
 

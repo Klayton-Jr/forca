@@ -246,7 +246,7 @@ public class PainelSala extends AnchorPane {
 
         noRaiz.getChildren().clear();
 
-        List<Usuario> usuarioOrdenado = sala.getUsuarios().stream().sorted(Comparator.comparingInt(Usuario::getPontuacao)).collect(Collectors.toList());
+        List<Usuario> usuarioOrdenado = sala.getUsuarios().stream().sorted((f1, f2) -> Long.compare(f2.getPontuacao(), f1.getPontuacao())).collect(Collectors.toList());
 
         for (Usuario usuarioSala : usuarioOrdenado) {
             noRaiz.getChildren().add(new TreeItem<>(usuarioSala));
