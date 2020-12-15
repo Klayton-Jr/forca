@@ -5,6 +5,7 @@ import servidor.servico.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 public class Cliente implements Runnable {
@@ -17,8 +18,10 @@ public class Cliente implements Runnable {
 
     @Override
     public void run() {
-        try (DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
-             DataInputStream reader = new DataInputStream(socket.getInputStream())) {
+        boolean fechaSocket = true;
+        try {
+            DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
+            DataInputStream reader = new DataInputStream(socket.getInputStream());
 
             JSONObject json = new JSONObject(reader.readUTF());
             String requisicao = json.getString("requisicao");
@@ -35,8 +38,6 @@ public class Cliente implements Runnable {
                 servico = new ListarSalasServico(socket, writer);
             else if ("EntrarSala".equalsIgnoreCase(requisicao))
                 servico = new EntrarSalaServico(socket, writer);
-            else if ("CarregarSala".equalsIgnoreCase(requisicao))
-                servico = new CarregarSalaServico(socket, writer);
             else if ("IniciarJogo".equalsIgnoreCase(requisicao))
                 servico = new IniciarJogoServico(socket, writer);
             else if ("EnviarPalavra".equalsIgnoreCase(requisicao))
@@ -45,14 +46,23 @@ public class Cliente implements Runnable {
                 servico = new EnviarRespostaServico(socket, writer);
             else if ("SairSala".equalsIgnoreCase(requisicao))
                 servico = new SairSalaServico(socket, writer);
+            else if ("InscreverBroadcast".equalsIgnoreCase(requisicao))
+                servico = new InscreverBroadCastServico(socket, writer);
 
             if (servico != null)
-                servico.executar(json.getJSONObject("dados"));
+                fechaSocket = servico.executar(json.getJSONObject("dados"));
             else
                 writer.writeUTF(new JSONObject().put("resultado", false).put("erro", "Não foi possível localizar requisição solicitada").toString());
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (fechaSocket)
+                    socket.close();
+            } catch (IOException e) {
+
+            }
         }
     }
 }

@@ -34,7 +34,10 @@ public class SairSalaServico extends Servico {
         List<Usuario> usuarios = sala.getUsuarios();
         Usuario usuarioSaindo = usuarios.get(usuarios.indexOf(usuarioRequisicao));
 
-        usuarios.remove(usuarioRequisicao);
+        fecharSocket(usuarioSaindo.getSocket());
+        usuarioSaindo.setSocket(null);
+
+        usuarios.remove(usuarioSaindo);
         sala.setNumeroAtualUsuario(usuarios.size());
 
         if (usuarios.stream().filter(user -> SituacaoUsuario.JOGANDO == user.getSituacao()).collect(Collectors.toList()).size() == 0 && usuarioSaindo.getSituacao() == SituacaoUsuario.JOGANDO) {
@@ -42,7 +45,11 @@ public class SairSalaServico extends Servico {
             sala.setUsuarioVezID(getNovoUsuarioVez(sala));
         }
 
-        return enviar(new JSONObject().put("resultado", true));
+        atualizarSala(sala);
+
+        enviar(new JSONObject().put("resultado", true));
+
+        return true;
     }
 
     private String getNovoUsuarioVez(Sala sala) {

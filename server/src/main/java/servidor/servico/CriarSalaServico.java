@@ -23,7 +23,6 @@ public class CriarSalaServico extends Servico {
 
     @Override
     public boolean executar(JSONObject json) throws IOException {
-
         CacheObjetos cacheObjetos = CacheObjetos.getInstance();
 
         Sala sala = new Sala();
@@ -31,7 +30,6 @@ public class CriarSalaServico extends Servico {
 
         if (cacheObjetos.getSalas().contains(sala))
             return enviar(new JSONObject().put("resultado", false).put("mensagem", "Já existe uma sala com este nome"));
-
 
         sala.setId(UUID.randomUUID().toString());
         sala.setUsuarioDonoID(json.getString("usuarioDonoID"));
@@ -44,8 +42,10 @@ public class CriarSalaServico extends Servico {
 
         cacheObjetos.getSalas().add(sala);
 
-        return enviar(new JSONObject().put("resultado", true)
+        enviar(new JSONObject().put("resultado", true)
                 .put("sala", FabricaObjetos.getSalaJSON(sala)));
+
+        return true;
     }
 
     private List<Usuario> getUsuarios(JSONArray jsonUsuarios) {

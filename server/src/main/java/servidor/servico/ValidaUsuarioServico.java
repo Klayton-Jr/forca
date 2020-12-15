@@ -41,7 +41,8 @@ public class ValidaUsuarioServico extends Servico {
 
         usuarios.add(usuarioLogin);
 
-        return enviar(new JSONObject().put("resultado", true)
+        enviar(new JSONObject().put("resultado", true)
                 .put("usuario", FabricaObjetos.getUsuarioJSON(usuarioLogin)));
+        return true;
     }
 }

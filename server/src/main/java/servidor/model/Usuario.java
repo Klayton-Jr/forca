@@ -1,5 +1,7 @@
 package servidor.model;
 
+import java.io.DataOutputStream;
+import java.net.Socket;
 import java.util.Objects;
 
 public class Usuario {
@@ -8,6 +10,8 @@ public class Usuario {
     private final String nome;
     private int pontuacao;
     private SituacaoUsuario situacao;
+    private Socket socket;
+    private DataOutputStream writer;
 
     public Usuario(String id, String nome) {
         this.id = id;
@@ -37,6 +41,22 @@ public class Usuario {
 
     public void setSituacao(SituacaoUsuario situacao) {
         this.situacao = situacao;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
+    }
+
+    public DataOutputStream getWriter() {
+        return writer;
+    }
+
+    public void setWriter(DataOutputStream write) {
+        this.writer = write;
     }
 
     @Override

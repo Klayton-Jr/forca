@@ -22,10 +22,15 @@ public class ListarSalasServico extends Servico {
     @Override
     public boolean executar(JSONObject json) throws IOException {
         while(isConnected()) {
-            enviar(new JSONObject()
-                    .put("resultado", true)
-                    .put("salas", getSalas()));
-            sleep(5000);
+            try {
+                enviar(new JSONObject()
+                        .put("resultado", true)
+                        .put("salas", getSalas()));
+
+                sleep(5000);
+            } catch (Exception e) {
+
+            }
         }
 
         return true;

@@ -24,7 +24,8 @@ public class EntrarSalaServico extends Servico {
         Sala salaRequisicao = FabricaObjetos.getSalaFromJSON(json);
         Usuario usuarioRequisicao = FabricaObjetos.getUsuarioFromJSON(json);
 
-        List<Sala> salas = CacheObjetos.getInstance().getSalas();
+        CacheObjetos cacheObjetos = CacheObjetos.getInstance();
+        List<Sala> salas = cacheObjetos.getSalas();
 
         int index = salas.indexOf(salaRequisicao);
 
@@ -38,6 +39,8 @@ public class EntrarSalaServico extends Servico {
         sala.getUsuarios().add(usuarioRequisicao);
         sala.setNumeroAtualUsuario(sala.getUsuarios().size());
 
-        return enviar(new JSONObject().put("resultado", true).put("sala", FabricaObjetos.getSalaJSON(sala)));
+        enviar(new JSONObject().put("resultado", true).put("sala", FabricaObjetos.getSalaJSON(sala)));
+
+        return true;
     }
 }

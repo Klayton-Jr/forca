@@ -28,7 +28,7 @@ public class PainelSala extends AnchorPane {
     private List<String> tentativas;
     private int quantidadeErros;
     private int quantidadeAcertosSequidos;
-    private CarregarSala carregarSala;
+    private InscreverBroadcast inscreverBroadcast;
     private Image imageAguardando;
     private Image imageSuaVez;
     private Image imageAguardandoPalavra;
@@ -362,8 +362,8 @@ public class PainelSala extends AnchorPane {
 
         atualizar();
 
-        carregarSala = new CarregarSala(new ObservadorCarregarSala(), form.getParametrosTelas());
-        new Thread(carregarSala).start();
+        inscreverBroadcast = new InscreverBroadcast(new ObservadorCarregarSala(), form.getParametrosTelas());
+        new Thread(inscreverBroadcast).start();
     }
 
     private class ObservadorCarregarSala implements Observador<ParametrosTelas> {
@@ -397,7 +397,7 @@ public class PainelSala extends AnchorPane {
 
         @Override
         public void sucesso(Boolean aBoolean) {
-            carregarSala.parar();
+            inscreverBroadcast.parar();
             form.mudarParaPainelMenu();
         }
 

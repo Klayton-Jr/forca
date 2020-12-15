@@ -49,8 +49,10 @@ public class EnviarRespostaServico extends Servico {
             }
         }
 
+        atualizarSala(sala);
 
-        return enviar(new JSONObject().put("resultado", true));
+        enviar(new JSONObject().put("resultado", true));
+        return true;
     }
 
     private int getPontuacao(int quantidadeErrosUsuario, int quantidadeUsuarios) {

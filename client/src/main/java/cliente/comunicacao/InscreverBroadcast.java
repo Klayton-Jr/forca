@@ -5,11 +5,11 @@ import cliente.model.ParametrosTelas;
 import cliente.model.Observador;
 import org.json.JSONObject;
 
-public class CarregarSala extends ComunicacaoBase<ParametrosTelas> {
+public class InscreverBroadcast extends ComunicacaoBase<ParametrosTelas> {
 
     private final ParametrosTelas parametros;
 
-    public CarregarSala(Observador<ParametrosTelas> observador, ParametrosTelas parametros) {
+    public InscreverBroadcast(Observador<ParametrosTelas> observador, ParametrosTelas parametros) {
         super(observador);
         this.parametros = parametros;
     }
@@ -17,7 +17,7 @@ public class CarregarSala extends ComunicacaoBase<ParametrosTelas> {
     @Override
     protected void executar() {
         enviarRequisicao(new JSONObject()
-                .put("requisicao", "CarregarSala")
+                .put("requisicao", "InscreverBroadcast")
                 .put("dados", new JSONObject()
                         .put("salaID", parametros.getSala().getId())
                         .put("nomeSala", parametros.getSala().getNome())

@@ -36,7 +36,10 @@ public class IniciarJogoServico extends Servico {
             usuario.setSituacao(SituacaoUsuario.AGUARDANDO);
         }
 
-        return enviar(new JSONObject().put("resultado", true));
+        atualizarSala(sala);
+
+        enviar(new JSONObject().put("resultado", true));
+        return true;
     }
 
 
