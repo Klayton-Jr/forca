@@ -51,10 +51,6 @@ public abstract class Servico {
         }
     }
 
-    protected final void fecharSocket() {
-        fecharSocket(getSocket());
-    }
-
     protected final void fecharSocket(Socket socket) {
         try {
             if (!socket.isClosed())
@@ -85,6 +81,8 @@ public abstract class Servico {
 
             usuarios.removeAll(usuariosRemovidos);
 
+            System.out.println("Trnasmitindo broadcast da sala " + sala.getNome());
+
             for (Usuario usuario : usuarios) {
                 jsonParametro.put("usuario", FabricaObjetos.getUsuarioJSON(usuario));
 
@@ -92,7 +90,7 @@ public abstract class Servico {
                 try {
                     usuario.getWriter().writeUTF(atualizacao.toString());
                 } catch (IOException e) {
-
+                    System.out.println("Não foi possível enviar atualização para o Usuário " + usuario.getNome());
                 }
             }
         });

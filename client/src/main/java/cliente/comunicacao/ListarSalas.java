@@ -31,17 +31,6 @@ public class ListarSalas extends ComunicacaoBase<List<Sala>> {
             sucesso(carregarSalas(json.getJSONArray("salas")));
         else
             erro(json.getString("mensagem"));
-
-        reexecutar();
-    }
-
-    private void reexecutar() {
-        try {
-            Thread.sleep(5000);
-            executar();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private List<Sala> carregarSalas(JSONArray jsonArray) {

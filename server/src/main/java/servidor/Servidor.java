@@ -17,8 +17,9 @@ public class Servidor {
                 new Thread(new Cliente(accept)).start();
             }
         } catch (Exception e) {
-            reiniciarServidor();
             e.printStackTrace();
+        } finally {
+            reiniciarServidor();
         }
     }
 

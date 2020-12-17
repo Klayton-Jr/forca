@@ -58,10 +58,12 @@ public class Cliente implements Runnable {
             e.printStackTrace();
         } finally {
             try {
-                if (fechaSocket)
+                if (fechaSocket) {
+                    System.out.println("Cliente desconectado: " + socket.getRemoteSocketAddress());
                     socket.close();
+                }
             } catch (IOException e) {
-
+                e.printStackTrace();
             }
         }
     }

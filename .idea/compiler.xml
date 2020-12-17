@@ -8,11 +8,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="server" />
         <module name="client" />
+        <module name="forca (1) (br.com)" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="client" target="14" />
       <module name="forca" target="14" />
+      <module name="forca (1) (br.com)" target="14" />
       <module name="server" target="14" />
     </bytecodeTargetLevel>
   </component>
